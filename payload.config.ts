@@ -1,18 +1,18 @@
 // storage-adapter-import-placeholder
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
-import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
-import sharp from 'sharp'
-import { Projects } from './collections/Projects'
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
+import { mongooseAdapter } from "@payloadcms/db-mongodb";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import path from "path";
+import { buildConfig } from "payload";
+import { fileURLToPath } from "url";
+import sharp from "sharp";
+import { Projects } from "./collections/Projects";
+import { Users } from "./collections/Users";
+import { Media } from "./collections/Media";
+import { Tags } from "./collections/Tags";
 
-
-
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 export default buildConfig({
   admin: {
@@ -21,17 +21,24 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Projects, Users, Media],
+  collections: [Projects, Users, Media, Tags],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+    url: process.env.DATABASE_URI || "",
   }),
   sharp,
   plugins: [
     // storage-adapter-placeholder
+    vercelBlobStorage({
+      enabled: true,
+      collections: {
+        media: true,
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
   ],
-})
+});
