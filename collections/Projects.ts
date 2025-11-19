@@ -10,5 +10,20 @@ export const Projects: CollectionConfig = {
       name: "title",
       type: "text",
     },
+    {
+      name: "description",
+      type: "text",
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+    },
+    {
+      name: "tags",
+      type: "relationship",
+      relationTo: "tags",
+      hasMany: true,
+    },
   ],
 };
