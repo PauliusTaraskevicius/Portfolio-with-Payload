@@ -1,19 +1,10 @@
-import configPromise from "@payload-config";
-import { getPayload } from "payload";
+import { getQueryClient, trpc } from "@/trpc/server";
 
 export default async function Home() {
-  const payload = await getPayload({
-    config: configPromise,
-  });
-
-  const data = await payload.find({
-    collection: "projects",
-    limit: 10,
-  });
-
-  return (
-    <div>
-      {JSON.stringify(data, null, 2)}
-    </div>
+  const queryClient = getQueryClient();
+  const projects = await queryClient.fetchQuery(
+    trpc.projects.getMany.queryOptions(),
   );
+
+  return <div>{JSON.stringify(projects, null, 2)}</div>;
 }
