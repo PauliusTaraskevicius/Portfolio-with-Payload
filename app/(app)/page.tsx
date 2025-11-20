@@ -6,5 +6,7 @@ export default async function Home() {
     trpc.projects.getMany.queryOptions(),
   );
 
-  return <div>{JSON.stringify(projects, null, 2)}</div>;
+  return <div>
+    {/* {JSON.stringify(projects, null, 2)} */}
+    </div>;
 }
