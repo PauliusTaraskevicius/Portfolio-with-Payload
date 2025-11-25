@@ -1,3 +1,5 @@
+import { Homepage } from "@/components/Homepage";
+import { PageLoader } from "@/components/PageLoader";
 import { getQueryClient, trpc } from "@/trpc/server";
 
 export default async function Home() {
@@ -6,7 +8,10 @@ export default async function Home() {
     trpc.projects.getMany.queryOptions(),
   );
 
-  return <div>
-    {/* {JSON.stringify(projects, null, 2)} */}
-    </div>;
+  return (
+    <>
+    
+      <Homepage />
+    </>
+  );
 }
