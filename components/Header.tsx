@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./ui/button";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MobileHeader } from "./MobileHeader";
+
+import { motion, useAnimation, Variants } from "framer-motion";
 
 const links = [
   {
@@ -27,13 +28,26 @@ export const Header = () => {
   const path = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [buttonHovered, setButtonHovered] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 1600);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <header>
       <div className="mx-auto flex max-w-440 items-center justify-between gap-5 p-5">
-        <div>
+        <motion.div
+          initial={{ x: -100, opacity: 0 }}
+          animate={isLoaded ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
+          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+        >
           <Image src="/logo.png" alt="Logo" width={60} height={60} />
-        </div>
+        </motion.div>
 
         <div className="hidden gap-6 md:flex">
           {links.map((link, index) => {
@@ -67,10 +81,13 @@ export const Header = () => {
         </div>
 
         <div className="flex items-center justify-center gap-4">
-          <button
-            className="group relative hidden cursor-pointer overflow-hidden rounded border border-white/20 bg-[#161a1d] px-6 py-3 text-white md:block"
+          <motion.button
+            className="group relative hidden cursor-pointer overflow-hidden rounded border border-white/20 bg-[#0d0d0d] px-6 py-3 text-white md:block"
             onMouseEnter={() => setButtonHovered(true)}
             onMouseLeave={() => setButtonHovered(false)}
+            initial={{ x: 100, opacity: 0 }}
+            animate={isLoaded ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
+            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
           >
             <div className="flex items-center justify-center space-x-3">
               <div className="mt-1 h-2 w-2 rounded-full bg-green-500" />
@@ -83,7 +100,7 @@ export const Header = () => {
                 </p>
               </div>
             </div>
-          </button>
+          </motion.button>
           <div className="md:hidden">
             <MobileHeader />
           </div>

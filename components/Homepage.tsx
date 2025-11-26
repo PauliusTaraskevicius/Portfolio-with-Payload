@@ -67,7 +67,7 @@ export const Homepage = () => {
       {/* Animated large text during loading */}
       {!hideLoader && (
         <motion.div
-          className="pointer-events-none fixed inset-0 z-[61] flex items-center justify-center"
+          className="pointer-events-none fixed inset-0 z-[61] mt-44 flex items-start justify-center"
           initial={{ opacity: 1 }}
           animate={shrink ? { opacity: 0 } : { opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
@@ -86,26 +86,26 @@ export const Homepage = () => {
                 ease: [0.76, 0, 0.24, 1],
                 delay: 0.2,
               }}
-              className="flex flex-col items-center gap-0"
+              className="flex flex-col items-center gap-0 -space-y-3 lg:-space-y-4"
             >
-              <div className="flex items-center justify-center gap-6">
+              <div className="flex items-center justify-center gap-1">
                 {line1.map((word, index) => (
                   <motion.div key={index} className="overflow-hidden">
                     <motion.h1
                       variants={child}
-                      className={`${bebasNeue.className} overflow-hidden text-6xl leading-20 font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+                      className={`${bebasNeue.className} overflow-hidden text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
                     >
                       {word}
                     </motion.h1>
                   </motion.div>
                 ))}
               </div>
-              <div className="flex items-center justify-center gap-6">
+              <div className="flex items-center justify-center gap-1">
                 {line2.map((word, index) => (
                   <motion.div key={index} className="overflow-hidden">
                     <motion.h1
                       variants={child}
-                      className={`${bebasNeue.className} text-6xl leading-20 font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+                      className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
                     >
                       {word}
                     </motion.h1>
@@ -121,14 +121,14 @@ export const Homepage = () => {
       <div className="mt-20 flex items-center justify-center px-8">
         <div className="flex max-w-4xl flex-col items-center justify-center text-center">
           <h1
-            className={`${bebasNeue.className} text-6xl leading-18 font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+            className={`${bebasNeue.className} text-6xl leading-12 font-bold tracking-tighter text-white uppercase md:text-7xl md:leading-14 lg:text-8xl lg:leading-20`}
           >
             Crafting Bold &<br />
             Memorable Websites
           </h1>
 
           <motion.p
-            className="text-xs leading-relaxed tracking-wider text-white/40 uppercase"
+            className="text-xs leading-4 tracking-wider text-white/40 uppercase"
             initial={{ opacity: 0 }}
             animate={hideLoader ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
