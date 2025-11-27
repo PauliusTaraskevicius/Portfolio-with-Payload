@@ -5,6 +5,9 @@ export const Projects: CollectionConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    useAsTitle: "title",
+  },
   fields: [
     {
       name: "title",
@@ -12,7 +15,7 @@ export const Projects: CollectionConfig = {
     },
     {
       name: "description",
-      type: "text",
+      type: "textarea",
     },
     {
       name: "image",

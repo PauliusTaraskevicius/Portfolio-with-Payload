@@ -1,5 +1,5 @@
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
-
+import { z } from "zod";
 import { Project } from "@/payload-types";
 
 export const projectsRouter = createTRPCRouter({
@@ -15,4 +15,14 @@ export const projectsRouter = createTRPCRouter({
     }));
     return formattedData as Project[];
   }),
+  getOne: baseProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.db.findByID({
+        collection: "projects",
+        id: input.id,
+      });
+
+      return data as Project;
+    }),
 });
