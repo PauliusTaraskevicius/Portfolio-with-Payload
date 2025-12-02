@@ -6,9 +6,6 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function Home() {
   const queryClient = getQueryClient();
-  const projects = await queryClient.fetchQuery(
-    trpc.projects.getMany.queryOptions(),
-  );
 
   void queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
 
