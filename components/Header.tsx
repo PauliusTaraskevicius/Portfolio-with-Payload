@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { MobileHeader } from "./MobileHeader";
 
-import { motion, useAnimation, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
 const links = [
   {
