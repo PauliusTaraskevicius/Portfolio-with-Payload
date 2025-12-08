@@ -73,7 +73,7 @@ export const Homepage = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           <motion.div
-            className="flex flex-col gap-0 overflow-hidden"
+            className="flex flex-col gap-0"
             variants={container}
             initial="hidden"
             animate={controls}
@@ -117,7 +117,6 @@ export const Homepage = () => {
         </motion.div>
       )}
 
-      {/* Final homepage content */}
       <div className="mt-20 flex items-center justify-center px-8">
         <div className="flex max-w-4xl flex-col items-center justify-center text-center">
           <h1

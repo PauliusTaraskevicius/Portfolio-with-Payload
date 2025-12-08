@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { MobileHeader } from "./MobileHeader";
-
 import { motion } from "framer-motion";
 
 const links = [
@@ -40,7 +39,7 @@ export const Header = () => {
 
   return (
     <header>
-      <div className="mx-auto flex max-w-440 items-center justify-between gap-5 p-5">
+      <div className="mx-auto flex max-w-440 items-center justify-between gap-5 p-5 overflow-hidden">
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={isLoaded ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
@@ -49,7 +48,12 @@ export const Header = () => {
           <Image src="/logo.png" alt="Logo" width={60} height={60} />
         </motion.div>
 
-        <div className="hidden gap-6 md:flex">
+        <motion.div
+          initial={{ y: -100, opacity: 0 }}
+          animate={isLoaded ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
+          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          className="hidden gap-6 md:flex"
+        >
           {links.map((link, index) => {
             const isActive = path === link.href;
             const isHovered = hoveredIndex === index;
@@ -78,7 +82,7 @@ export const Header = () => {
               </Link>
             );
           })}
-        </div>
+        </motion.div>
 
         <div className="flex items-center justify-center gap-4">
           <motion.button
@@ -101,9 +105,14 @@ export const Header = () => {
               </div>
             </div>
           </motion.button>
-          <div className="md:hidden">
+          <motion.div
+            className=" md:hidden"
+            initial={{ x: 100, opacity: 0 }}
+            animate={isLoaded ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
+            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          >
             <MobileHeader />
-          </div>
+          </motion.div>
         </div>
       </div>
     </header>

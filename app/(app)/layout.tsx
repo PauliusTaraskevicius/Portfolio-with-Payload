@@ -31,8 +31,10 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <TRPCReactProvider>
-          <Header />
-          {children}
+          <main className="min-h-screen">
+            <Header />
+            {children}
+          </main>
         </TRPCReactProvider>
       </body>
     </html>
