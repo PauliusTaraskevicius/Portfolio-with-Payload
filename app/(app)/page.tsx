@@ -3,6 +3,8 @@ import { Homepage } from "@/components/Homepage";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { Projects } from "./projects/components/Projects";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Introduction } from "@/components/Introduction";
+import { Random } from "@/components/random";
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -15,6 +17,15 @@ export default async function Home() {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Projects />
       </HydrationBoundary>
+      <Introduction />
+      {/* <div className="flex flex-col">
+        <Random />
+        <Random />
+        <Random />
+        <Random />
+        <Random />
+        <Random />
+      </div> */}
     </>
   );
 }

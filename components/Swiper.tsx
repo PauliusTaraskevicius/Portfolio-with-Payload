@@ -20,25 +20,37 @@ interface ProjectsSwiperProps {
 export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex);
   };
 
   useEffect(() => {
+    if (!mounted) return;
+
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 1600);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [mounted]);
+
+  // Don't render Swiper until client-side hydration is complete
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <motion.div
       initial={{ y: 0, opacity: 0 }}
       animate={isLoaded ? { y: -100, opacity: 1 } : { y: 0, opacity: 0 }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-      className="relative flex w-full flex-col items-center gap-2 mt-20"
+      className="relative mt-20 flex w-full flex-col items-center gap-2"
     >
       <h1 className="text-xs leading-4 font-semibold tracking-wider text-white/40 uppercase">
         Featured Projects
@@ -81,7 +93,7 @@ export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
       </div>
 
       {/* Navigation Arrows Below */}
-      <div className="flex items-center justify-center gap-4">
+      <div className="mt-2 flex items-center justify-center gap-4">
         <button
           className="swiper-button-prev-custom flex h-12 w-12 cursor-pointer items-center justify-center rounded-md border border-white/20 bg-transparent transition-all hover:bg-white/10"
           aria-label="Previous slide"

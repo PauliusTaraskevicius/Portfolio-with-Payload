@@ -4,7 +4,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -19,6 +18,8 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const links = [
   {
@@ -40,8 +41,18 @@ const links = [
 ];
 
 export const MobileHeader = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 1600);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <Drawer direction="top" >
+    <Drawer direction="top">
       <DrawerTrigger>
         <CiMenuBurger className="size-6 cursor-pointer text-white" />
       </DrawerTrigger>

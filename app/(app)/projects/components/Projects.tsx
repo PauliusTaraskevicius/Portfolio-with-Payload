@@ -64,11 +64,13 @@ export const Projects = () => {
 
   return (
     <>
-      {/* Cursor Follower */}
+      {/* Mobile swiper*/}
       <div className="mt-20 flex cursor-pointer items-center justify-center md:hidden">
         <ProjectsSwiper projects={data || []} />
       </div>
-      <div className="hidden md:flex">
+
+      <div className="mt-40 hidden md:flex">
+        {/* Cursor follower */}
         <motion.div
           style={{
             left: cursorX,
