@@ -127,7 +127,7 @@ export const Homepage = () => {
           </h1>
 
           <motion.p
-            className="text-xs leading-4 tracking-wider text-white/40 uppercase"
+            className={`${bebasNeue.className} text-sm leading-4 tracking-widest text-white/40 uppercase`}
             initial={{ opacity: 0 }}
             animate={hideLoader ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}

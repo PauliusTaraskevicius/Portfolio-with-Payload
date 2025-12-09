@@ -1,11 +1,18 @@
 "use client";
 
-import { useInView, motion, useScroll, useTransform } from "framer-motion";
+import {
+  useInView,
+  motion,
+  useScroll,
+  useMotionValueEvent,
+} from "framer-motion";
 import { Bebas_Neue } from "next/font/google";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { BsBullseye } from "react-icons/bs";
 import { CgPerformance } from "react-icons/cg";
 import { FaRegEye } from "react-icons/fa";
+import { CircleIconWithProgress } from "./animations/CircleIconWithProgress";
+import { CircleIconStatic } from "./animations/CircleIconStatic";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -15,6 +22,26 @@ const bebasNeue = Bebas_Neue({
 export const Introduction = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const iconsRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isComplete, setIsComplete] = useState(false);
+  const [hasCompleted, setHasCompleted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Detect mobile
+  useEffect(() => {
+    if (!mounted) return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, [mounted]);
 
   const isInView = useInView(scrollRef, {
     once: false,
@@ -26,122 +53,172 @@ export const Introduction = () => {
     amount: 0.3,
   });
 
-  return (
-    <div className="mx-auto mt-40 flex max-w-240 flex-col items-center justify-center">
-      <motion.div
-        ref={scrollRef}
-        className="flex w-full flex-col items-center justify-center"
-        initial={{ opacity: 0, y: 100 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }}
-        transition={{
-          duration: 0.8,
-          ease: [0.76, 0, 0.24, 1],
-        }}
-      >
+  // Track scroll progress - only use target when mounted and desktop
+  const { scrollYProgress } = useScroll(
+    mounted && !isMobile && containerRef.current
+      ? {
+          target: containerRef,
+          offset: ["start start", "end end"],
+        }
+      : undefined,
+  );
+
+  // Check when all circles are complete
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (!mounted || isMobile) return;
+    if (latest >= 0.85) {
+      setIsComplete(true);
+      setHasCompleted(true);
+    } else if (latest < 0.1) {
+      setIsComplete(false);
+    }
+  });
+
+  // Block scrolling down only, never block scrolling up
+  useEffect(() => {
+    if (!mounted || isMobile) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY < 0) return;
+
+      if (!isComplete && !hasCompleted && e.deltaY > 0) {
+        const container = containerRef.current;
+        if (container) {
+          const rect = container.getBoundingClientRect();
+          if (rect.top <= 0 && rect.bottom > window.innerHeight) {
+            return;
+          }
+          if (rect.bottom <= window.innerHeight + 100) {
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [isComplete, hasCompleted, isMobile, mounted]);
+
+  // Show loading placeholder during SSR/initial mount
+  if (!mounted) {
+    return (
+      <div className="mx-auto mt-20 flex min-h-screen max-w-240 flex-col items-center justify-center">
         <h2
-          className={` ${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+          className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
         >
           I build websites
         </h2>
-        <br />
-        <p
-          className={` ${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
-        >
-          At the intersection of:
-        </p>
-      </motion.div>
+      </div>
+    );
+  }
 
-      <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={iconsIsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }}
-        transition={{
-          duration: 0.8,
-          ease: [0.76, 0, 0.24, 1],
-        }}
-        className="mt-40 flex w-full items-center justify-evenly"
-        ref={iconsRef}
-      >
-        <div>
-          <button className="items-center rounded-full border-2 border-white/20 p-2">
-            <FaRegEye className="size-10 text-white" />
-          </button>
+  // Mobile version
+  if (isMobile) {
+    return (
+      <div className="mx-auto mt-20 flex max-w-240 flex-col items-center justify-center px-4">
+        <div className="flex w-full flex-col items-center justify-center">
+          <h2
+            className={`${bebasNeue.className} text-center text-5xl font-bold tracking-tighter text-white uppercase`}
+          >
+            I build websites
+          </h2>
+          <br />
+          <p
+            className={`${bebasNeue.className} text-center text-5xl font-bold tracking-tighter text-white uppercase`}
+          >
+            At the intersection of:
+          </p>
         </div>
-        <div>
-          <button className="items-center rounded-full border-2 border-white/20 p-2">
-            <CgPerformance className="size-10 text-white" />
-          </button>
+
+        {/* Venn diagram layout for mobile */}
+        <div className="relative mt-40 h-[280px] w-[280px]">
+          {/* Top circle - Performance */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+            <CircleIconStatic
+              icon={CgPerformance}
+              label="Performance"
+              font={bebasNeue.className}
+              size={130}
+            />
+          </div>
+          {/* Bottom left - Aesthetic */}
+          <div className="absolute top-0 left-0">
+            <CircleIconStatic
+              icon={FaRegEye}
+              label="Aesthetic"
+              font={bebasNeue.className}
+              size={130}
+            />
+          </div>
+          {/* Bottom right - Strategy */}
+          <div className="absolute top-0 right-0">
+            <CircleIconStatic
+              icon={BsBullseye}
+              label="Strategy"
+              font={bebasNeue.className}
+              size={130}
+            />
+          </div>
         </div>
-        <div>
-          <button className="items-center rounded-full border-2 border-white/20 p-2">
-            <BsBullseye className="size-10 text-white" />
-          </button>
-        </div>
-      </motion.div>
-    </div>
-  );
-};
+      </div>
+    );
+  }
 
-
-const CircleIcon = ({
-  icon: Icon,
-  progress,
-  index,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  progress: number;
-  index: number;
-}) => {
-  // Each icon starts drawing at different scroll positions
-  // Icon 0: 0-33%, Icon 1: 33-66%, Icon 2: 66-100%
-  const startProgress = index * 0.33;
-  const endProgress = startProgress + 0.33;
-
-  // Calculate stroke progress for this specific icon
-  const strokeProgress = Math.min(
-    1,
-    Math.max(0, (progress - startProgress) / (endProgress - startProgress))
-  );
-
-  const circumference = 2 * Math.PI * 36; // radius = 36
-
+  // Desktop version with scroll animation
   return (
-    <div className="relative flex items-center justify-center">
-      {/* SVG Circle Border */}
-      <svg
-        className="absolute -rotate-90"
-        width="80"
-        height="80"
-        viewBox="0 0 80 80"
-      >
-        {/* Background circle */}
-        <circle
-          cx="40"
-          cy="40"
-          r="36"
-          fill="none"
-          stroke="rgba(255, 255, 255, 0.1)"
-          strokeWidth="2"
-        />
-        {/* Animated circle */}
-        <circle
-          cx="40"
-          cy="40"
-          r="36"
-          fill="none"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={circumference * (1 - strokeProgress)}
-          style={{
-            transition: "stroke-dashoffset 0.1s ease-out",
-          }}
-        />
-      </svg>
-      {/* Icon */}
-      <button className="relative z-10 flex items-center justify-center rounded-full p-2">
-        <Icon className="size-10 text-white" />
-      </button>
+    <div
+      ref={containerRef}
+      className="relative mx-auto max-w-240"
+      style={{ height: "320vh" }}
+    >
+      <div className="sticky top-0 flex h-screen flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center">
+          <h2
+            className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+          >
+            I build websites
+          </h2>
+          <br />
+          <p
+            className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+          >
+            At the intersection of:
+          </p>
+        </div>
+
+        <div className="mt-20 flex w-full items-center justify-evenly">
+          <div className="flex flex-col items-center">
+            <CircleIconWithProgress
+              icon={FaRegEye}
+              label="Aesthetic"
+              index={0}
+              scrollYProgress={scrollYProgress}
+              hasCompleted={hasCompleted}
+              font={bebasNeue.className}
+            />
+          </div>
+          <div className="flex flex-col items-center">
+            <CircleIconWithProgress
+              icon={CgPerformance}
+              label="Performance"
+              index={1}
+              scrollYProgress={scrollYProgress}
+              hasCompleted={hasCompleted}
+              font={bebasNeue.className}
+            />
+          </div>
+          <div className="flex flex-col items-center">
+            <CircleIconWithProgress
+              icon={BsBullseye}
+              label="Strategy"
+              index={2}
+              scrollYProgress={scrollYProgress}
+              hasCompleted={hasCompleted}
+              font={bebasNeue.className}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

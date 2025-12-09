@@ -12,6 +12,7 @@ export const Projects = () => {
   const { data } = useQuery(trpc.projects.getMany.queryOptions());
   const [activeProject, setActiveProject] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Mouse position tracking
   const mouseX = useMotionValue(0);
@@ -23,6 +24,11 @@ export const Projects = () => {
   const cursorY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -30,37 +36,37 @@ export const Projects = () => {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, mounted]);
 
   useEffect(() => {
+    if (!mounted) return;
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 1600);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [mounted]);
 
   const getScale = (projectId: string, index: number, activeIndex: number) => {
     if (activeProject === null) return 1;
     if (activeProject === projectId) return 1.08;
-
-    // Calculate distance from active project
     const distance = Math.abs(index - activeIndex);
-    // Reduced scale down: 0.92, 0.84, 0.76
     return Math.max(0.6, 1 - distance * 0.08);
   };
 
   const getMargin = (projectId: string, index: number, activeIndex: number) => {
     if (activeProject === null) return 0;
     if (activeProject === projectId) return 0;
-
-    // Calculate distance from active project
     const distance = Math.abs(index - activeIndex);
-    // Reduce margin for cards further away: -2px, -4px, -6px, etc.
     return -distance * 10;
   };
 
   const activeIndex = data?.findIndex((p) => p.id === activeProject) ?? -1;
+
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <>
