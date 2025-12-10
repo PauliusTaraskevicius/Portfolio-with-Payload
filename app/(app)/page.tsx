@@ -4,6 +4,8 @@ import { getQueryClient, trpc } from "@/trpc/server";
 import { Projects } from "./projects/components/Projects";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Introduction } from "@/components/Introduction";
+import { About } from "@/components/About";
+import { ListProjectsView } from "./projects/components/ListProjectsView";
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -17,6 +19,10 @@ export default async function Home() {
         <Projects />
       </HydrationBoundary>
       <Introduction />
+      <About />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ListProjectsView />
+      </HydrationBoundary>
     </>
   );
 }
