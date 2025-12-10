@@ -8,7 +8,6 @@ export const CircleIconWithProgress = ({
   label,
   index,
   scrollYProgress,
-  hasCompleted,
   size = 200,
   font,
 }: {
@@ -16,7 +15,6 @@ export const CircleIconWithProgress = ({
   label: string;
   index: number;
   scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
-  hasCompleted: boolean;
   size?: number;
   font?: string;
 }) => {
@@ -31,13 +29,11 @@ export const CircleIconWithProgress = ({
 
   const [start, end] = ranges[index];
 
+  // Animation works both ways - fills when scrolling down, empties when scrolling up
   const strokeDashoffset = useTransform(scrollYProgress, (p) => {
-    if (hasCompleted) {
-      return 0;
-    }
     const strokeProgress = Math.min(
       1,
-      Math.max(0, (p - start) / (end - start)),
+      Math.max(0, (p - start) / (end - start))
     );
     return circumference * (1 - strokeProgress);
   });
@@ -67,7 +63,7 @@ export const CircleIconWithProgress = ({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="rgba(255, 255, 255, 0.3)"
+            stroke="rgba(255, 255, 255, 0.5)"
             strokeWidth="1"
             strokeLinecap="round"
             strokeDasharray={circumference}
@@ -77,7 +73,7 @@ export const CircleIconWithProgress = ({
         <div className="relative z-10 flex flex-col items-center justify-center">
           <Icon className="size-8 text-white" />
           <span
-            className={`${font} mt-2 text-lg tracking-widest text-white uppercase`}
+            className={`${font} mt-2 text-sm tracking-widest text-white uppercase`}
           >
             {label}
           </span>
