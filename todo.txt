@@ -1,0 +1,2 @@
+ - suppreddHyrationwarning => solve it
+ - add suspense (with skeletons) and ErrorBoundaries for server components
