@@ -16,13 +16,17 @@ export const projectsRouter = createTRPCRouter({
     return formattedData as Project[];
   }),
   getOne: baseProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ slug: z.string() }))
     .query(async ({ ctx, input }) => {
-      const data = await ctx.db.findByID({
+      const data = await ctx.db.find({
         collection: "projects",
-        id: input.id,
+        where: { slug: { equals: input.slug } },
       });
 
-      return data as Project;
+      if (!data.docs.length) {
+        throw new Error("Not Found");
+      }
+
+      return data.docs[0] as Project;
     }),
 });

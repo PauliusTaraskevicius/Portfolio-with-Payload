@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -66,6 +67,7 @@ export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
         }}
         modules={[Navigation]}
         onSlideChange={handleSlideChange}
+
       >
         {projects.map((project) => (
           <SwiperSlide key={project.id}>

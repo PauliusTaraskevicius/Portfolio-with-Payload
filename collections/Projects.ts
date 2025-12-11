@@ -28,5 +28,10 @@ export const Projects: CollectionConfig = {
       relationTo: "tags",
       hasMany: true,
     },
+    {
+      name: "slug",
+      type: "text",
+      unique: true,
+    },
   ],
 };
