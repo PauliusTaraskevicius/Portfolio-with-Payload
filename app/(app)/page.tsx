@@ -1,11 +1,9 @@
 import { Homepage } from "@/components/Homepage";
-
 import { getQueryClient, trpc } from "@/trpc/server";
 import { Projects } from "./projects/components/Projects";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Introduction } from "@/components/Introduction";
 import { About } from "@/components/About";
-import { ListProjectsView } from "./projects/components/ListProjectsView";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ListProjectsViewWrapper } from "./projects/components/ListProjectsViewWrapper";

@@ -13,6 +13,7 @@ import { Project } from "@/payload-types";
 import { Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface ProjectsSwiperProps {
   projects: Project[];
@@ -67,31 +68,34 @@ export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
         }}
         modules={[Navigation]}
         onSlideChange={handleSlideChange}
-
       >
         {projects.map((project) => (
           <SwiperSlide key={project.id}>
-            {typeof project.image !== "string" && project.image?.url && (
-              <div className="relative overflow-hidden rounded p-5">
-                <Image
-                  src={project.image.url}
-                  alt={project.title || ""}
-                  priority
-                  className="h-full w-full object-contain"
-                  height={600}
-                  width={600}
-                />
-              </div>
-            )}
+            <Link href={`/projects/${project.slug}`}>
+              {typeof project.image !== "string" && project.image?.url && (
+                <div className="relative overflow-hidden rounded p-5">
+                  <Image
+                    src={project.image.url}
+                    alt={project.title || ""}
+                    priority
+                    className="h-full w-full object-contain"
+                    height={600}
+                    width={600}
+                  />
+                </div>
+              )}
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>
 
       {/* Project Title */}
       <div className="text-center">
-        <h3 className="text-sm font-semibold tracking-wider text-white/40 uppercase">
-          {projects[activeIndex]?.title}
-        </h3>
+        <Link href={`/projects/${projects[activeIndex]?.slug}`}>
+          <h3 className="text-sm font-semibold tracking-wider text-white/40 uppercase">
+            {projects[activeIndex]?.title}
+          </h3>
+        </Link>
       </div>
 
       {/* Navigation Arrows Below */}

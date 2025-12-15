@@ -129,6 +129,7 @@ export interface Project {
   description?: string | null;
   image?: (string | null) | Media;
   tags?: (string | Tag)[] | null;
+  url?: string | null;
   slug?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -278,6 +279,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   description?: T;
   image?: T;
   tags?: T;
+  url?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;

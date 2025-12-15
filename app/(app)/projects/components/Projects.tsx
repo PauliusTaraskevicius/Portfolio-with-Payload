@@ -6,6 +6,7 @@ import { useTRPC } from "@/trpc/client";
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ProjectsSwiper } from "@/components/Swiper";
+import Link from "next/link";
 
 export const Projects = () => {
   const trpc = useTRPC();
@@ -131,46 +132,51 @@ export const Projects = () => {
                   }}
                   className="cursor-pointer"
                 >
-                  {typeof project.image !== "string" && project.image?.url && (
-                    <div className="relative h-full overflow-hidden rounded">
-                      <motion.div
-                        className="h-full w-full"
-                        animate={{
-                          scale: activeProject === project.id ? 1.05 : 1,
-                        }}
-                        transition={{
-                          duration: 0.6,
-                          ease: [0.16, 1, 0.3, 1],
-                        }}
-                      >
-                        <Image
-                          src={project.image.url}
-                          alt={project.title || ""}
-                          priority
-                          className="h-full object-fill"
-                          height={600}
-                          width={600}
-                        />
-                      </motion.div>
-                    </div>
-                  )}
+                  <Link href={`/projects/${project.slug}`}>
+                    {typeof project.image !== "string" &&
+                      project.image?.url && (
+                        <div className="relative h-full overflow-hidden rounded">
+                          <motion.div
+                            className="h-full w-full"
+                            animate={{
+                              scale: activeProject === project.id ? 1.05 : 1,
+                            }}
+                            transition={{
+                              duration: 0.6,
+                              ease: [0.16, 1, 0.3, 1],
+                            }}
+                          >
+                            <Image
+                              src={project.image.url}
+                              alt={project.title || ""}
+                              priority
+                              className="h-full object-fill"
+                              height={600}
+                              width={600}
+                            />
+                          </motion.div>
+                        </div>
+                      )}
+                  </Link>
 
-                  <motion.h2
-                    className="mt-2 text-xs leading-4 font-semibold tracking-wider text-white/40 uppercase"
-                    animate={{
-                      x: activeProject === project.id ? 8 : 0,
-                      color:
-                        activeProject === project.id
-                          ? "#ffffff"
-                          : "rgba(255, 255, 255, 0.8)",
-                    }}
-                    transition={{
-                      duration: 0.4,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                  >
-                    {project.title}
-                  </motion.h2>
+                  <Link href={`/projects/${project.slug}`}>
+                    <motion.h2
+                      className="mt-2 text-xs leading-4 font-semibold tracking-wider text-white/40 uppercase"
+                      animate={{
+                        x: activeProject === project.id ? 8 : 0,
+                        color:
+                          activeProject === project.id
+                            ? "#ffffff"
+                            : "rgba(255, 255, 255, 0.8)",
+                      }}
+                      transition={{
+                        duration: 0.4,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                    >
+                      {project.title}
+                    </motion.h2>
+                  </Link>
                 </motion.div>
               ))}
             </div>
