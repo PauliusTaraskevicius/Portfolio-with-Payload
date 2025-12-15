@@ -29,6 +29,10 @@ export const Projects: CollectionConfig = {
       hasMany: true,
     },
     {
+      name: "url",
+      type: "text",
+    },
+    {
       name: "slug",
       type: "text",
       unique: true,
