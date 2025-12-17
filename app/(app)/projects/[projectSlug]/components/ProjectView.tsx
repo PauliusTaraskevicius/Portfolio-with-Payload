@@ -1,12 +1,14 @@
 "use client";
 
 import { useTRPC } from "@/trpc/client";
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Bebas_Neue } from "next/font/google";
 import { motion } from "framer-motion";
-import { useState } from "react";
+
 import Image from "next/image";
+import { ProjectsDialog } from "../../components/ProjectsDialog";
+
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -18,20 +20,45 @@ interface ProjectViewViewProps {
 }
 
 export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
-  const queryClient = useQueryClient();
   const trpc = useTRPC();
-
-  const [buttonHovered, setButtonHovered] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [pictureCount, setPictureCount] = useState(1);
 
   const { data } = useSuspenseQuery(
     trpc.projects.getOne.queryOptions({ slug: projectSlug }),
   );
 
+  const allImages = [];
+
+  if (data?.image) {
+    const mainImageUrl =
+      typeof data.image === "string" ? data.image : data.image?.url;
+    if (mainImageUrl) {
+      allImages.push(mainImageUrl);
+    }
+  }
+
+  if (data?.gallery) {
+    data.gallery.forEach((item: any) => {
+      const imageUrl =
+        typeof item.image === "string" ? item.image : item.image?.url;
+      if (imageUrl) {
+        allImages.push(imageUrl);
+      }
+    });
+  }
+
   return (
     <div className="mx-auto mt-20 flex max-w-440 items-center justify-center p-5 text-white">
-      <div className="flex flex-col items-center justify-center gap-4">
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+        className="relative flex flex-col items-center justify-center gap-4"
+      >
+        <div className="top-0 left-0 flex lg:absolute">
+          <h1>
+            <ProjectsDialog />
+          </h1>
+        </div>
         <div className="flex gap-2">
           {data?.tags?.map((tag, index) => (
             <Badge key={index}>
@@ -68,22 +95,26 @@ export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
             </button>
           </a>
         </div>
-        <div>
-          {typeof data.image !== "string" && data.image?.url && (
-            <div className="relative mt-20 h-full overflow-hidden rounded">
+        <div className="mt-10 flex flex-col gap-4 lg:flex-row">
+          {allImages.map((imageUrl, index) => (
+            <div key={index} className="transition lg:hover:scale-125">
               <Image
-                src={data.image.url}
-                alt={data.title || ""}
+                src={imageUrl}
+                alt={imageUrl}
                 priority
-                className="h-full object-fill"
-                height={400}
-                width={400}
+                className="h-full rounded object-fill"
+                height={600}
+                width={600}
               />
-              <span className="mt-6 text-white/40">/{pictureCount}</span>
+              <span
+                className={`${bebasNeue.className} text-md rounded py-2 text-white/40 lg:text-left`}
+              >
+                /{index + 1}
+              </span>
             </div>
-          )}
+          ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
