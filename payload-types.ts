@@ -128,6 +128,12 @@ export interface Project {
   title?: string | null;
   description?: string | null;
   image?: (string | null) | Media;
+  gallery?:
+    | {
+        image?: (string | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
   tags?: (string | Tag)[] | null;
   url?: string | null;
   slug?: string | null;
@@ -278,6 +284,12 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   image?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
   tags?: T;
   url?: T;
   slug?: T;

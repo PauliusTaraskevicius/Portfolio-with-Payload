@@ -23,6 +23,17 @@ export const Projects: CollectionConfig = {
       relationTo: "media",
     },
     {
+      name: "gallery",
+      type: "array",
+      fields: [
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+        },
+      ],
+    },
+    {
       name: "tags",
       type: "relationship",
       relationTo: "tags",
