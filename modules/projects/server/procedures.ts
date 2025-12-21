@@ -8,6 +8,7 @@ export const projectsRouter = createTRPCRouter({
       collection: "projects",
       where: {},
       sort: "-createdAt",
+      depth: 2,
     });
 
     const formattedData = data.docs.map((doc) => ({
