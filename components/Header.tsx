@@ -69,7 +69,7 @@ export const Header = () => {
               >
                 <p
                   className={cn(
-                    "text-[.875em] font-semibold tracking-tight text-white uppercase transition-colors duration-300",
+                    "text-[.875em] font-semibold tracking-widest text-white uppercase transition-colors duration-300",
                     isActive
                       ? "cursor-default text-white/20"
                       : isAnyHovered && !isHovered
