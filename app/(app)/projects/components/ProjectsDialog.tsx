@@ -5,7 +5,6 @@ import { Bebas_Neue } from "next/font/google";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
 const bebasNeue = Bebas_Neue({

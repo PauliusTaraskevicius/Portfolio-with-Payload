@@ -20,6 +20,7 @@ import Link from "next/link";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { ContactDialog } from "./ContactDialog";
 
 const links = [
   {
@@ -34,10 +35,10 @@ const links = [
     href: "/about",
     label: "About",
   },
-  {
-    href: "/contact",
-    label: "Contact",
-  },
+  // {
+  //   href: "/contact",
+  //   label: "Contact",
+  // },
 ];
 
 export const MobileHeader = () => {
@@ -80,6 +81,11 @@ export const MobileHeader = () => {
               {link.label}
             </Link>
           ))}
+          <ContactDialog>
+            <span className="text-3xl font-bold tracking-tighter uppercase">
+              Contact Me
+            </span>
+          </ContactDialog>
         </div>
         <DrawerFooter>
           <div className="flex items-center justify-center gap-4">
