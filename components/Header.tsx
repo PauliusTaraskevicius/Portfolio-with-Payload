@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { MobileHeader } from "./MobileHeader";
 import { motion } from "framer-motion";
+import { ContactDialog } from "./ContactDialog";
 
 const links = [
   {
@@ -39,7 +40,7 @@ export const Header = () => {
 
   return (
     <header>
-      <div className="mx-auto flex max-w-440 items-center justify-between gap-5 p-5 overflow-hidden">
+      <div className="mx-auto flex max-w-440 items-center justify-between gap-5 overflow-hidden p-5">
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={isLoaded ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
@@ -85,28 +86,30 @@ export const Header = () => {
         </motion.div>
 
         <div className="flex items-center justify-center gap-4">
-          <motion.button
-            className="group relative hidden cursor-pointer overflow-hidden rounded border border-white/20 bg-[#0d0d0d] px-6 py-3 text-white md:block"
-            onMouseEnter={() => setButtonHovered(true)}
-            onMouseLeave={() => setButtonHovered(false)}
-            initial={{ x: 100, opacity: 0 }}
-            animate={isLoaded ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
-            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-          >
-            <div className="flex items-center justify-center space-x-3">
-              <div className="mt-1 h-2 w-2 rounded-full bg-green-500" />
-              <div className="relative z-10 overflow-hidden">
-                <p className="text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                  Contact
-                </p>
-                <p className="absolute top-full left-0 text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
-                  Contact
-                </p>
+          <ContactDialog>
+            <motion.button
+              className="group relative hidden cursor-pointer overflow-hidden rounded border border-white/20 bg-[#0d0d0d] px-6 py-3 text-white md:block"
+              onMouseEnter={() => setButtonHovered(true)}
+              onMouseLeave={() => setButtonHovered(false)}
+              initial={{ x: 100, opacity: 0 }}
+              animate={isLoaded ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
+              transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+            >
+              <div className="flex items-center justify-center space-x-3">
+                <div className="mt-1 h-2 w-2 rounded-full bg-green-500" />
+                <div className="relative z-10 overflow-hidden">
+                  <p className="text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                    Contact
+                  </p>
+                  <p className="absolute top-full left-0 text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                    Contact
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.button>
+            </motion.button>
+          </ContactDialog>
           <motion.div
-            className=" md:hidden"
+            className="md:hidden"
             initial={{ x: 100, opacity: 0 }}
             animate={isLoaded ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
