@@ -7,8 +7,8 @@ import { About } from "@/components/About";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ListProjectsViewWrapper } from "./projects/components/ListProjectsViewWrapper";
-
-
+import { HomePageSkeleton } from "@/components/skeletons/HomePageSkeleton";
+import { ListProjectViewSkeleton } from "@/components/skeletons/ListProjectViewSkeleton";
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -19,7 +19,7 @@ export default async function Home() {
     <>
       <Homepage />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<p>Loading projects...</p>}>
+        <Suspense fallback={<HomePageSkeleton />}>
           <ErrorBoundary fallback={<p>Error loading projects.</p>} />
           <Projects />
         </Suspense>
@@ -27,8 +27,8 @@ export default async function Home() {
       <Introduction />
       <About />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ErrorBoundary fallback={<p>Error loading projects.</p>} />
-        <Suspense fallback={<p>Loading projects...</p>}>
+        <Suspense fallback={<ListProjectViewSkeleton />}>
+          <ErrorBoundary fallback={<p>Error loading projects.</p>} />
           <ListProjectsViewWrapper />
         </Suspense>
       </HydrationBoundary>

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ProjectsSwiper } from "@/components/Swiper";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export const Projects = () => {
   const trpc = useTRPC();
@@ -67,6 +68,10 @@ export const Projects = () => {
   // Don't render until mounted to avoid hydration mismatch
   if (!mounted) {
     return null;
+  }
+
+  if (!data) {
+    return notFound();
   }
 
   return (

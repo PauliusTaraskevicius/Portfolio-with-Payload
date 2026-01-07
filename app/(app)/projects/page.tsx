@@ -3,6 +3,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ProjectsHoverList } from "./components/ProjectsHoverList";
+import { ProjectsHoverListSkeleton } from "@/components/skeletons/ProjectsHoverListSkeleton";
 
 const Page = async () => {
   const queryClient = getQueryClient();
@@ -11,7 +12,7 @@ const Page = async () => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<div>Loading projects...</div>}>
+      <Suspense fallback={<ProjectsHoverListSkeleton />}>
         <ErrorBoundary fallback={<div>Error loading projects.</div>} />
         <ProjectsHoverList />
       </Suspense>

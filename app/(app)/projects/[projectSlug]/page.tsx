@@ -3,6 +3,8 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { ProjectView } from "./components/ProjectView";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { ProjectViewSkeleton } from "@/components/skeletons/ProjectViewSkeleton";
+import { notFound } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ projectSlug: string }>;
@@ -16,9 +18,13 @@ const Page = async ({ params }: PageProps) => {
     trpc.projects.getOne.queryOptions({ slug: projectSlug }),
   );
 
+  if (!projectSlug) {
+    return notFound();
+  }
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<div>Loading project...</div>}>
+      <Suspense fallback={<ProjectViewSkeleton />}>
         <ErrorBoundary fallback={<div>Failed to load project.</div>} />
         <ProjectView projectSlug={projectSlug} />
       </Suspense>
