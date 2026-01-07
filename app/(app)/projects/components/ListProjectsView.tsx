@@ -49,6 +49,7 @@ export const ListProjectsView = () => {
   const handleMouseLeave = () => {
     setHoveredProject(null);
   };
+  
 
   return (
     <>
