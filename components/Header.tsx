@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { MobileHeader } from "./MobileHeader";
 import { motion } from "framer-motion";
 import { ContactDialog } from "./ContactDialog";
+import { Logo } from "./Logo";
 
 const links = [
   {
@@ -46,7 +46,7 @@ export const Header = () => {
           animate={isLoaded ? { x: 0, opacity: 1 } : { x: -100, opacity: 0 }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
-          <Image src="/logo.png" alt="Logo" width={60} height={60} />
+          <Logo />
         </motion.div>
 
         <motion.div

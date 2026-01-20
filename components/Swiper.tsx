@@ -73,15 +73,16 @@ export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
           <SwiperSlide key={project.id}>
             <Link href={`/projects/${project.slug}`}>
               {typeof project.image !== "string" && project.image?.url && (
-                <div className="relative overflow-hidden rounded p-5">
-                  <Image
-                    src={project.image.url}
-                    alt={project.title || ""}
-                    priority
-                    className="h-full w-full object-contain"
-                    height={600}
-                    width={600}
-                  />
+                <div className="px-5">
+                  <div className="relative h-[250px] w-full overflow-hidden rounded">
+                    <Image
+                      src={project.image.url}
+                      alt={project.title || ""}
+                      priority
+                      className="h-full w-full object-cover"
+                      fill
+                    />
+                  </div>
                 </div>
               )}
             </Link>

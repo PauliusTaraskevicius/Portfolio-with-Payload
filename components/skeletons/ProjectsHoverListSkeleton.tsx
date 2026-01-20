@@ -25,8 +25,8 @@ export const ProjectsHoverListSkeleton = () => {
           <div className="flex w-full items-center justify-center gap-6 lg:gap-10">
             {/* Left Images */}
             <div className="flex items-center gap-4">
-              <Skeleton className="h-[180px] w-[160px] rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]" />
-              <Skeleton className="h-[180px] w-[160px] rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]" />
+              <Skeleton className="h-[180px] w-40 rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60" />
+              <Skeleton className="h-[180px] w-40 rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60" />
             </div>
 
             {/* Center */}
@@ -46,8 +46,8 @@ export const ProjectsHoverListSkeleton = () => {
 
             {/* Right Images */}
             <div className="flex items-center gap-4">
-              <Skeleton className="h-[180px] w-[160px] rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]" />
-              <Skeleton className="h-[180px] w-[160px] rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]" />
+              <Skeleton className="h-[180px] w-40 rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60" />
+              <Skeleton className="h-[180px] w-40 rounded-lg bg-white/10 lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60" />
             </div>
           </div>
         </div>
