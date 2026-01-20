@@ -1,8 +1,69 @@
-import Image from "next/image";
+import { Metadata } from "next";
 
+import Image from "next/image";
 import { Bebas_Neue } from "next/font/google";
 import { InfiniteRuningText } from "@/components/InfiniteRuningText";
 import { FaGithub, FaLinkedin, FaFacebook, FaGoogle } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title:
+    "PaulyDev – Full-Stack Web Developer | Next.js, React, Web Applications",
+  description:
+    "PaulyDev is a full-stack web development portfolio focused on building high-performance, SEO-optimized websites and web applications. I specialize in Next.js, React, TypeScript, and modern backend technologies to create scalable, secure, and conversion-driven digital products.From business websites and landing pages to custom SaaS platforms, I help startups and entrepreneurs turn ideas into production-ready applications that load fast, rank well on Google, and grow with your business.",
+  keywords: [
+    "Full-Stack Web Developer",
+    "Next.js Developer",
+    "React Developer",
+    "High Performance Websites",
+    "SEO Optimized Web Applications",
+    "TypeScript Developer",
+    "Fast Loading Websites",
+    "Scalable Web Solutions",
+    "Secure Web Applications",
+  ],
+  openGraph: {
+    title:
+      "PaulyDev – Full-Stack Web Developer | Next.js, React, Web Applications",
+    description:
+      "Full-stack web developer specializing in Next.js, React, and modern web applications. I build fast, SEO-optimized, scalable websites and SaaS products for startups and businesses.",
+    url: "https://paulydev.com",
+    siteName: "PaulyDev",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "",
+        width: "",
+        height: "",
+        alt: "PaulyDev Open Graph Image",
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "PaulyDev – Full-Stack Web Developer | Next.js, React, Web Applications",
+    description:
+      "Full-stack web developer specializing in Next.js, React, and modern web applications. I build fast, SEO-optimized, scalable websites and SaaS products for startups and businesses.",
+    images: [""],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://paulydev.com/about",
+  },
+};
 
 const bebasNeue = Bebas_Neue({
   weight: "400",

@@ -1,2 +1,9 @@
- - suppreddHyrationwarning => solve it
- - add suspense (with skeletons) and ErrorBoundaries for server components
+- Main homepage pahostinus uzpildyt     images: [
+      {
+        url: "",
+        width: "",
+        height: "",
+        alt: "PaulyDev Open Graph Image",
+        type: "image/png",
+      },
+    ], fieldus metadata

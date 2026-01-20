@@ -39,7 +39,7 @@ export const Header = () => {
   }, []);
 
   return (
-    <header>
+    <nav>
       <div className="mx-auto flex max-w-440 items-center justify-between gap-5 overflow-hidden p-5">
         <motion.div
           initial={{ x: -100, opacity: 0 }}
@@ -118,6 +118,6 @@ export const Header = () => {
           </motion.div>
         </div>
       </div>
-    </header>
+    </nav>
   );
 };
