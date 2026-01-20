@@ -57,7 +57,7 @@ export const Homepage = () => {
       {/* Loading background */}
       {!hideLoader && (
         <motion.div
-          className="pointer-events-none fixed inset-0 z-[60] bg-[#0d0d0d]"
+          className="pointer-events-none fixed inset-0 z-60 bg-[#0d0d0d]"
           initial={{ opacity: 1 }}
           animate={shrink ? { opacity: 0 } : { opacity: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -67,7 +67,7 @@ export const Homepage = () => {
       {/* Animated large text during loading */}
       {!hideLoader && (
         <motion.div
-          className="pointer-events-none fixed inset-0 z-[61] mt-44 flex items-start justify-center"
+          className="pointer-events-none fixed inset-0 z-61 mt-44 flex items-start justify-center"
           initial={{ opacity: 1 }}
           animate={shrink ? { opacity: 0 } : { opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}

@@ -14,13 +14,13 @@ import { CiMenuBurger } from "react-icons/ci";
 import { FaLinkedin } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
-import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ContactDialog } from "./ContactDialog";
+import { MobileLogo } from "./MobileLogo";
+import { usePathname } from "next/navigation";
 
 const links = [
   {
@@ -42,7 +42,9 @@ const links = [
 ];
 
 export const MobileHeader = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,8 +54,12 @@ export const MobileHeader = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   return (
-    <Drawer direction="top">
+    <Drawer direction="top" open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger>
         <CiMenuBurger className="size-6 cursor-pointer text-white" />
       </DrawerTrigger>
@@ -63,7 +69,7 @@ export const MobileHeader = () => {
         </VisuallyHidden>
         <DrawerHeader>
           <div className="flex items-center justify-between">
-            <Image src="/logo.png" alt="Logo" width={60} height={60} />
+            <MobileLogo />
             <DrawerClose className="cursor-pointer" asChild>
               <Button variant="ghost" className="cursor-pointer" size="icon">
                 <IoIosClose className="size-7 text-black" />

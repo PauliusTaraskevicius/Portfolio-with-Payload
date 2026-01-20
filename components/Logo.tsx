@@ -1,0 +1,26 @@
+"use client";
+
+import { IoIosArrowForward } from "react-icons/io";
+import { Bebas_Neue } from "next/font/google";
+
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+export const Logo = () => {
+  return (
+    <div className="flex items-center justify-center gap-2 bg-transparent">
+      <div className="flex items-center justify-center rounded-none bg-white p-0.5">
+        <IoIosArrowForward size={21} className="text-black" />
+      </div>
+      <div>
+        <span
+          className={`${bebasNeue.className} text-xl tracking-widest text-white`}
+        >
+          paulydev
+        </span>
+      </div>
+    </div>
+  );
+};
