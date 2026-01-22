@@ -53,7 +53,7 @@ export const ProjectsHoverList = () => {
       </div>
 
       {/* Desktop View - snap scrolling with images side by side */}
-      <div className="hidden h-screen snap-y snap-mandatory overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:block max-w-440 mx-auto">
+      <div className="mx-auto hidden h-screen max-w-440 snap-y snap-mandatory overflow-y-scroll [scrollbar-width:none] md:block [&::-webkit-scrollbar]:hidden">
         {data?.map((project) => {
           const galleryImages =
             project.gallery
@@ -71,11 +71,11 @@ export const ProjectsHoverList = () => {
               key={project.id}
               className="flex h-screen snap-start items-center justify-center px-4"
             >
-              <div className="flex w-full  items-center justify-center gap-6 lg:gap-10">
+              <div className="flex w-full items-center justify-center gap-6 lg:gap-10">
                 {/* Left Images */}
                 <div className="flex items-center gap-4">
                   {leftImages[0] && (
-                    <div className="relative h-[180px] w-[160px] overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]">
+                    <div className="relative h-[180px] w-40 overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60">
                       <Image
                         src={leftImages[0] as string}
                         alt={`${project.title} image 1`}
@@ -85,7 +85,7 @@ export const ProjectsHoverList = () => {
                     </div>
                   )}
                   {leftImages[1] && (
-                    <div className="relative h-[180px] w-[160px] overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]">
+                    <div className="relative h-[180px] w-40 overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60">
                       <Image
                         src={leftImages[1] as string}
                         alt={`${project.title} image 2`}
@@ -126,7 +126,7 @@ export const ProjectsHoverList = () => {
                 {/* Right Images */}
                 <div className="flex items-center gap-4">
                   {rightImages[0] && (
-                    <div className="relative h-[180px] w-[160px] overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]">
+                    <div className="relative h-[180px] w-40 overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60">
                       <Image
                         src={rightImages[0] as string}
                         alt={`${project.title} image 3`}
@@ -136,7 +136,7 @@ export const ProjectsHoverList = () => {
                     </div>
                   )}
                   {rightImages[1] && (
-                    <div className="relative h-[180px] w-[160px] overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-[240px]">
+                    <div className="relative h-[180px] w-40 overflow-hidden rounded-lg shadow-2xl lg:h-[220px] lg:w-[200px] xl:h-[260px] xl:w-60">
                       <Image
                         src={rightImages[1] as string}
                         alt={`${project.title} image 4`}
