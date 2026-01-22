@@ -80,6 +80,7 @@ export const ProjectsHoverList = () => {
                         src={leftImages[0] as string}
                         alt={`${project.title} image 1`}
                         fill
+                        sizes="(max-width: 1024px) 160px, (max-width: 1280px) 200px, 240px"
                         className="object-cover"
                       />
                     </div>

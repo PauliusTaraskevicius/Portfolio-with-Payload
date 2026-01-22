@@ -101,7 +101,7 @@ export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
               <Image
                 src={imageUrl}
                 alt={imageUrl}
-                priority
+                priority={index === 0} // Only first image gets priority
                 className="h-full rounded object-fill"
                 height={600}
                 width={600}
