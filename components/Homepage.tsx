@@ -2,7 +2,7 @@
 
 import { Bebas_Neue } from "next/font/google";
 import { motion, useAnimation, Variants } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -12,9 +12,30 @@ const bebasNeue = Bebas_Neue({
 export const Homepage = () => {
   const [shrink, setShrink] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const controls = useAnimation();
 
+  // Scroll to top and prevent scrolling on mount (before paint)
+  useLayoutEffect(() => {
+    // Force scroll to top immediately
+    window.scrollTo(0, 0);
+
+    // Prevent scrolling during animation
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  // Mark component as mounted
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const sequence = async () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       await controls.start("visible");
@@ -22,10 +43,12 @@ export const Homepage = () => {
       setShrink(true);
       await new Promise((resolve) => setTimeout(resolve, 1600));
       setHideLoader(true);
+      // Re-enable scrolling after animation completes
+      document.body.style.overflow = "";
     };
 
     sequence();
-  }, [controls]);
+  }, [controls, isMounted]);
 
   const line1 = ["Crafting", "Bold", "&"];
   const line2 = ["Memorable", "Websites"];

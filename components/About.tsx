@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { Bebas_Neue } from "next/font/google";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const bebasNeue = Bebas_Neue({
@@ -47,12 +48,14 @@ export const About = () => {
       >
         <div className="flex items-center justify-center space-x-3">
           <div className="relative z-10 overflow-hidden">
-            <p className="text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
-              About Me
-            </p>
-            <p className="absolute top-full left-0 text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
-              About Me
-            </p>
+            <Link href="/about">
+              <p className="text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                About Me
+              </p>
+              <p className="absolute top-full left-0 text-[.875em] font-semibold tracking-tight uppercase transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                About Me
+              </p>
+            </Link>
           </div>
         </div>
       </motion.button>
