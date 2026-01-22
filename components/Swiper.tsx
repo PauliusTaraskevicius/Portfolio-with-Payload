@@ -79,6 +79,7 @@ export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
                       src={project.image.url}
                       alt={project.title || ""}
                       priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="h-full w-full object-cover"
                       fill
                     />
