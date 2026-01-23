@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Required for Payload CMS on Vercel
+  serverExternalPackages: ["sharp", "graphql"],
   // Optimize for modern browsers - reduce bundle size
   experimental: {
     optimizePackageImports: [
