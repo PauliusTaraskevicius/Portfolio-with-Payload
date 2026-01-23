@@ -6,18 +6,12 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
-import { Bebas_Neue } from "next/font/google";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { BsBullseye } from "react-icons/bs";
 import { CgPerformance } from "react-icons/cg";
 import { FaRegEye } from "react-icons/fa";
 import { CircleIconWithProgress } from "./animations/CircleIconWithProgress";
 import { CircleIconStatic } from "./animations/CircleIconStatic";
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 // Desktop component with scroll animation
 const IntroductionDesktop = () => {
@@ -44,15 +38,12 @@ const IntroductionDesktop = () => {
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest >= 0.85) {
-      setIsComplete(true);
-    } else {
-      setIsComplete(false);
-    }
+    setIsComplete(latest >= 0.85);
   });
 
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
+  // Optimized wheel handler with useCallback
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
       if (e.deltaY < 0) return;
 
       if (!isComplete && e.deltaY > 0) {
@@ -67,11 +58,14 @@ const IntroductionDesktop = () => {
           }
         }
       }
-    };
+    },
+    [isComplete],
+  );
 
+  useEffect(() => {
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [isComplete]);
+  }, [handleWheel]);
 
   return (
     <div
@@ -87,15 +81,11 @@ const IntroductionDesktop = () => {
           animate={hasAnimated ? { y: 0, opacity: 1 } : { y: 100, opacity: 0 }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
-          <h2
-            className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
-          >
+          <h2 className="font-bebas text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl">
             I build websites
           </h2>
           <br />
-          <p
-            className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
-          >
+          <p className="font-bebas text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl">
             At the intersection of:
           </p>
         </motion.div>
@@ -112,7 +102,7 @@ const IntroductionDesktop = () => {
               label="Aesthetic"
               index={0}
               scrollYProgress={scrollYProgress}
-              font={bebasNeue.className}
+              font="font-bebas"
             />
           </div>
           <div className="flex flex-col items-center">
@@ -121,7 +111,7 @@ const IntroductionDesktop = () => {
               label="Performance"
               index={1}
               scrollYProgress={scrollYProgress}
-              font={bebasNeue.className}
+              font="font-bebas"
             />
           </div>
           <div className="flex flex-col items-center">
@@ -130,7 +120,7 @@ const IntroductionDesktop = () => {
               label="Strategy"
               index={2}
               scrollYProgress={scrollYProgress}
-              font={bebasNeue.className}
+              font="font-bebas"
             />
           </div>
         </motion.div>
@@ -144,15 +134,11 @@ const IntroductionMobile = () => {
   return (
     <div className="mx-auto mt-20 flex max-w-240 flex-col items-center justify-center px-4">
       <div className="flex w-full flex-col items-center justify-center">
-        <h2
-          className={`${bebasNeue.className} text-center text-5xl font-bold tracking-tighter text-white uppercase`}
-        >
+        <h2 className="font-bebas text-center text-5xl font-bold tracking-tighter text-white uppercase">
           I build websites
         </h2>
         <br />
-        <p
-          className={`${bebasNeue.className} text-center text-5xl font-bold tracking-tighter text-white uppercase`}
-        >
+        <p className="font-bebas text-center text-5xl font-bold tracking-tighter text-white uppercase">
           At the intersection of:
         </p>
       </div>
@@ -163,7 +149,7 @@ const IntroductionMobile = () => {
           <CircleIconStatic
             icon={CgPerformance}
             label="Performance"
-            font={bebasNeue.className}
+            font="font-bebas"
             size={130}
           />
         </div>
@@ -171,7 +157,7 @@ const IntroductionMobile = () => {
           <CircleIconStatic
             icon={FaRegEye}
             label="Aesthetic"
-            font={bebasNeue.className}
+            font="font-bebas"
             size={130}
           />
         </div>
@@ -179,7 +165,7 @@ const IntroductionMobile = () => {
           <CircleIconStatic
             icon={BsBullseye}
             label="Strategy"
-            font={bebasNeue.className}
+            font="font-bebas"
             size={130}
           />
         </div>
@@ -194,25 +180,30 @@ export const Introduction = () => {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Check mobile immediately on mount
+    setIsMobile(window.innerWidth < 768);
 
-  useEffect(() => {
-    if (!mounted) return;
+    // Debounced resize handler
+    let timeoutId: NodeJS.Timeout;
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768);
+      }, 150);
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, [mounted]);
+
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   // Show loading placeholder during SSR/initial mount
   if (!mounted) {
     return (
       <div className="mx-auto mt-20 flex min-h-screen max-w-240 flex-col items-center justify-center">
-        <h2
-          className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
-        >
+        <h2 className="font-bebas text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl">
           I build websites
         </h2>
       </div>

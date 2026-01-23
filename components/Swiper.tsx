@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
@@ -19,28 +19,26 @@ interface ProjectsSwiperProps {
   projects: Project[];
 }
 
-export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
+// Memoize the component to prevent unnecessary re-renders
+export const ProjectsSwiper = memo(function ProjectsSwiper({
+  projects,
+}: ProjectsSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    // Start loaded timer immediately
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 1600);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex);
   };
-
-  useEffect(() => {
-    if (!mounted) return;
-
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1600);
-
-    return () => clearTimeout(timer);
-  }, [mounted]);
 
   // Don't render Swiper until client-side hydration is complete
   if (!mounted) {
@@ -118,4 +116,4 @@ export const ProjectsSwiper = ({ projects }: ProjectsSwiperProps) => {
       </div>
     </motion.div>
   );
-};
+});

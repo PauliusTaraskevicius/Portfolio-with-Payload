@@ -3,7 +3,8 @@ import { Metadata } from "next";
 import { Homepage } from "@/components/Homepage";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { Projects } from "./projects/components/Projects";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { dehydrate } from "@tanstack/react-query";
+import { QueryHydrationWrapper } from "@/components/QueryHydrationWrapper";
 import { Introduction } from "@/components/Introduction";
 import { About } from "@/components/About";
 import { Suspense } from "react";
@@ -77,20 +78,20 @@ export default async function Home() {
   return (
     <>
       <Homepage />
-      <HydrationBoundary state={dehydrate(queryClient)}>
+      <QueryHydrationWrapper state={dehydrate(queryClient)}>
         <Suspense fallback={<HomePageSkeleton />}>
-          <ErrorBoundary fallback={<p>Error loading projects.</p>} />
-          <Projects />
+          <ErrorBoundary fallback={<p>Error loading projects.</p>}>
+            <Projects />
+          </ErrorBoundary>
         </Suspense>
-      </HydrationBoundary>
-      <Introduction />
-      <About />
-      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Introduction />
+        <About />
         <Suspense fallback={<ListProjectViewSkeleton />}>
-          <ErrorBoundary fallback={<p>Error loading projects.</p>} />
-          <ListProjectsViewWrapper />
+          <ErrorBoundary fallback={<p>Error loading projects.</p>}>
+            <ListProjectsViewWrapper />
+          </ErrorBoundary>
         </Suspense>
-      </HydrationBoundary>
+      </QueryHydrationWrapper>
     </>
   );
 }

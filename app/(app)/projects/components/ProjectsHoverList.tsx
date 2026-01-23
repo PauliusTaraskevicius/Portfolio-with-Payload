@@ -4,14 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Media } from "@/payload-types";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { Bebas_Neue } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 const getImageUrl = (
   image: string | Media | null | undefined,
@@ -42,9 +36,7 @@ export const ProjectsHoverList = () => {
               ))}
             </div>
             <Link href={`/projects/${project.slug}`}>
-              <span
-                className={`${bebasNeue.className} text-[24px] leading-[0.9] font-semibold text-white uppercase transition hover:text-white/20`}
-              >
+              <span className="font-bebas text-[24px] leading-[0.9] font-semibold text-white uppercase transition hover:text-white/20">
                 {project.title}
               </span>
             </Link>
@@ -111,9 +103,7 @@ export const ProjectsHoverList = () => {
                     ))}
                   </div>
                   <Link href={`/projects/${project.slug}`}>
-                    <span
-                      className={`${bebasNeue.className} text-center text-[60px] leading-[0.9] font-semibold text-white uppercase transition hover:text-white/70 lg:text-[90px] xl:text-[120px]`}
-                    >
+                    <span className="font-bebas text-center text-[60px] leading-[0.9] font-semibold text-white uppercase transition hover:text-white/70 lg:text-[90px] xl:text-[120px]">
                       {project.title}
                     </span>
                   </Link>

@@ -1,16 +1,10 @@
 "use client";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Bebas_Neue } from "next/font/google";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import Link from "next/link";
 import { DialogTitle } from "@radix-ui/react-dialog";
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export const ProjectsDialog = () => {
   const trpc = useTRPC();
@@ -22,7 +16,7 @@ export const ProjectsDialog = () => {
       <DialogTrigger asChild>
         <button className="flex cursor-pointer items-center gap-2 transition-opacity hover:opacity-70">
           <div className="h-2 w-2 rounded-full bg-white" />
-          <span className={`${bebasNeue.className} tracking-wide text-white`}>
+          <span className="font-bebas tracking-wide text-white">
             WORKS INDEX
           </span>
         </button>
@@ -38,9 +32,7 @@ export const ProjectsDialog = () => {
               href={`/projects/${project.slug}`}
               className="group"
             >
-              <DialogTitle
-                className={`${bebasNeue.className} text-4xl font-bold tracking-tight text-white uppercase transition-opacity hover:opacity-60 md:text-5xl lg:text-6xl xl:text-7xl`}
-              >
+              <DialogTitle className="font-bebas text-4xl font-bold tracking-tight text-white uppercase transition-opacity hover:opacity-60 md:text-5xl lg:text-6xl xl:text-7xl">
                 {project.title}
               </DialogTitle>
             </Link>

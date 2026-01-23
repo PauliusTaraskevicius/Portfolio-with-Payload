@@ -1,12 +1,6 @@
 "use client";
 
 import { IoIosArrowForward } from "react-icons/io";
-import { Bebas_Neue } from "next/font/google";
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export const MobileLogo = () => {
   return (
@@ -15,9 +9,7 @@ export const MobileLogo = () => {
         <IoIosArrowForward size={21} className="text-white" />
       </div>
       <div>
-        <span
-          className={`${bebasNeue.className} text-xl tracking-widest text-black`}
-        >
+        <span className="font-bebas text-xl tracking-widest text-black">
           paulydev
         </span>
       </div>

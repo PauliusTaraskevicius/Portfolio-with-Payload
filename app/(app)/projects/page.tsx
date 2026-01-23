@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ProjectsHoverList } from "./components/ProjectsHoverList";
 import { ProjectsHoverListSkeleton } from "@/components/skeletons/ProjectsHoverListSkeleton";
+import { QueryHydrationWrapper } from "@/components/QueryHydrationWrapper";
 
 export const metadata: Metadata = {
   title: "Projects | PaulyDev – Web Development Portfolio & Case Studies",
@@ -70,12 +71,13 @@ const Page = async () => {
   void queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <QueryHydrationWrapper state={dehydrate(queryClient)}>
       <Suspense fallback={<ProjectsHoverListSkeleton />}>
-        <ErrorBoundary fallback={<div>Error loading projects.</div>} />
-        <ProjectsHoverList />
+        <ErrorBoundary fallback={<div>Error loading projects.</div>}>
+          <ProjectsHoverList />
+        </ErrorBoundary>
       </Suspense>
-    </HydrationBoundary>
+    </QueryHydrationWrapper>
   );
 };
 

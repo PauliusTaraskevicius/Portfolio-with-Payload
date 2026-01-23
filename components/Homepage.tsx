@@ -1,13 +1,33 @@
 "use client";
 
-import { Bebas_Neue } from "next/font/google";
 import { motion, useAnimation, Variants } from "framer-motion";
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState, useLayoutEffect, useMemo } from "react";
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
+// Static animation variants - defined outside component to avoid recreation
+const containerVariants: Variants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const childVariants: Variants = {
+  hidden: { y: 100, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.33, 1, 0.68, 1],
+    },
+  },
+};
+
+const LINE1 = ["Crafting", "Bold", "&"] as const;
+const LINE2 = ["Memorable", "Websites"] as const;
 
 export const Homepage = () => {
   const [shrink, setShrink] = useState(false);
@@ -28,52 +48,37 @@ export const Homepage = () => {
     };
   }, []);
 
-  // Mark component as mounted
+  // Combined mount and animation effect
   useEffect(() => {
     setIsMounted(true);
-  }, []);
 
-  useEffect(() => {
-    if (!isMounted) return;
+    let timeoutIds: NodeJS.Timeout[] = [];
 
     const sequence = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise<void>((resolve) => {
+        const id = setTimeout(resolve, 100);
+        timeoutIds.push(id);
+      });
       await controls.start("visible");
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise<void>((resolve) => {
+        const id = setTimeout(resolve, 100);
+        timeoutIds.push(id);
+      });
       setShrink(true);
-      await new Promise((resolve) => setTimeout(resolve, 1600));
+      await new Promise<void>((resolve) => {
+        const id = setTimeout(resolve, 1600);
+        timeoutIds.push(id);
+      });
       setHideLoader(true);
-      // Re-enable scrolling after animation completes
       document.body.style.overflow = "";
     };
 
     sequence();
-  }, [controls, isMounted]);
 
-  const line1 = ["Crafting", "Bold", "&"];
-  const line2 = ["Memorable", "Websites"];
-
-  const container: Variants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-      },
-    },
-  };
-
-  const child: Variants = {
-    hidden: { y: 100, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.33, 1, 0.68, 1],
-      },
-    },
-  };
+    return () => {
+      timeoutIds.forEach(clearTimeout);
+    };
+  }, [controls]);
 
   return (
     <>
@@ -97,7 +102,7 @@ export const Homepage = () => {
         >
           <motion.div
             className="flex flex-col gap-0"
-            variants={container}
+            variants={containerVariants}
             initial="hidden"
             animate={controls}
           >
@@ -112,11 +117,11 @@ export const Homepage = () => {
               className="flex flex-col items-center gap-0 -space-y-3 lg:-space-y-4"
             >
               <div className="flex items-center justify-center gap-1">
-                {line1.map((word, index) => (
+                {LINE1.map((word, index) => (
                   <motion.div key={index} className="overflow-hidden">
                     <motion.h1
-                      variants={child}
-                      className={`${bebasNeue.className} overflow-hidden text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+                      variants={childVariants}
+                      className="font-bebas overflow-hidden text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl"
                     >
                       {word}
                     </motion.h1>
@@ -124,11 +129,11 @@ export const Homepage = () => {
                 ))}
               </div>
               <div className="flex items-center justify-center gap-1">
-                {line2.map((word, index) => (
+                {LINE2.map((word, index) => (
                   <motion.div key={index} className="overflow-hidden">
                     <motion.h1
-                      variants={child}
-                      className={`${bebasNeue.className} text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
+                      variants={childVariants}
+                      className="font-bebas text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl"
                     >
                       {word}
                     </motion.h1>
@@ -142,15 +147,13 @@ export const Homepage = () => {
 
       <div className="mt-20 flex items-center justify-center px-8">
         <div className="flex max-w-4xl flex-col items-center justify-center text-center">
-          <h1
-            className={`${bebasNeue.className} text-6xl leading-12 font-bold tracking-tighter text-white uppercase md:text-7xl md:leading-14 lg:text-8xl lg:leading-20`}
-          >
+          <h1 className="font-bebas text-6xl leading-12 font-bold tracking-tighter text-white uppercase md:text-7xl md:leading-14 lg:text-8xl lg:leading-20">
             Crafting Bold &<br />
             Memorable Websites
           </h1>
 
           <motion.p
-            className={`${bebasNeue.className} text-sm leading-4 tracking-widest text-white/40 uppercase`}
+            className="font-bebas text-sm leading-4 tracking-widest text-white/40 uppercase"
             initial={{ opacity: 0 }}
             animate={hideLoader ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}

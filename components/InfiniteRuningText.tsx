@@ -1,12 +1,6 @@
 "use client";
 
-import { Bebas_Neue } from "next/font/google";
 import { motion } from "framer-motion";
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export const InfiniteRuningText = () => {
   const text = [
@@ -31,7 +25,7 @@ export const InfiniteRuningText = () => {
         {duplicatedText.map((item, i) => (
           <span
             key={i}
-            className={`${bebasNeue.className} text-6xl whitespace-nowrap text-white/20 md:text-8xl leading-none px-5`}
+            className="font-bebas px-5 text-6xl leading-none whitespace-nowrap text-white/20 md:text-8xl"
           >
             {item}
           </span>

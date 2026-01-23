@@ -9,6 +9,7 @@ import { Metadata } from "next";
 import { createTRPCContext } from "@/trpc/init";
 import { appRouter } from "@/trpc/routers/_app";
 import { Media } from "@/payload-types";
+import { QueryHydrationWrapper } from "@/components/QueryHydrationWrapper";
 
 interface PageProps {
   params: Promise<{ projectSlug: string }>;
@@ -105,12 +106,12 @@ const Page = async ({ params }: PageProps) => {
   }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <QueryHydrationWrapper state={dehydrate(queryClient)}>
       <Suspense fallback={<ProjectViewSkeleton />}>
         <ErrorBoundary fallback={<div>Failed to load project.</div>} />
         <ProjectView projectSlug={projectSlug} />
       </Suspense>
-    </HydrationBoundary>
+    </QueryHydrationWrapper>
   );
 };
 
