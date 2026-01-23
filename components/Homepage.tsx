@@ -153,7 +153,7 @@ export const Homepage = () => {
           </h1>
 
           <motion.p
-            className="font-bebas text-sm leading-4 tracking-widest text-white/40 uppercase"
+            className="font-bebas text-sm leading-4 tracking-widest text-white/70 uppercase"
             initial={{ opacity: 0 }}
             animate={hideLoader ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}

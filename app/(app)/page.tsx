@@ -1,17 +1,37 @@
 import { Metadata } from "next";
-
-import { Homepage } from "@/components/Homepage";
+import dynamic from "next/dynamic";
 import { getQueryClient, trpc } from "@/trpc/server";
-import { Projects } from "./projects/components/Projects";
 import { dehydrate } from "@tanstack/react-query";
 import { QueryHydrationWrapper } from "@/components/QueryHydrationWrapper";
-import { Introduction } from "@/components/Introduction";
-import { About } from "@/components/About";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { ListProjectsViewWrapper } from "./projects/components/ListProjectsViewWrapper";
 import { HomePageSkeleton } from "@/components/skeletons/HomePageSkeleton";
 import { ListProjectViewSkeleton } from "@/components/skeletons/ListProjectViewSkeleton";
+import { getPayload } from "payload";
+import config from "@payload-config";
+
+// Dynamic imports for non-critical components (reduces initial JS bundle)
+const Homepage = dynamic(() =>
+  import("@/components/Homepage").then((mod) => ({ default: mod.Homepage })),
+);
+const Projects = dynamic(() =>
+  import("./projects/components/Projects").then((mod) => ({
+    default: mod.Projects,
+  })),
+);
+const Introduction = dynamic(() =>
+  import("@/components/Introduction").then((mod) => ({
+    default: mod.Introduction,
+  })),
+);
+const About = dynamic(() =>
+  import("@/components/About").then((mod) => ({ default: mod.About })),
+);
+const ListProjectsViewWrapper = dynamic(() =>
+  import("./projects/components/ListProjectsViewWrapper").then((mod) => ({
+    default: mod.ListProjectsViewWrapper,
+  })),
+);
 
 export const metadata: Metadata = {
   title:
@@ -75,8 +95,29 @@ export default async function Home() {
 
   void queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
 
+  // Fetch first project image for LCP preload
+  const payload = await getPayload({ config });
+  const projects = await payload.find({
+    collection: "projects",
+    limit: 1,
+    sort: "-createdAt",
+  });
+
+  const firstProjectImage = projects.docs[0]?.image;
+  const lcpImageUrl =
+    typeof firstProjectImage !== "string" ? firstProjectImage?.url : null;
+
   return (
     <>
+      {/* Preload LCP image for faster discovery */}
+      {lcpImageUrl && (
+        <link
+          rel="preload"
+          as="image"
+          href={lcpImageUrl}
+          fetchPriority="high"
+        />
+      )}
       <Homepage />
       <QueryHydrationWrapper state={dehydrate(queryClient)}>
         <Suspense fallback={<HomePageSkeleton />}>

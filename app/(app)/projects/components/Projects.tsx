@@ -3,11 +3,24 @@
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  lazy,
+  Suspense,
+} from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ProjectsSwiper } from "@/components/Swiper";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+// Lazy load Swiper - only needed on mobile
+const ProjectsSwiper = lazy(() =>
+  import("@/components/Swiper").then((mod) => ({
+    default: mod.ProjectsSwiper,
+  })),
+);
 
 // Spring config defined outside to prevent recreation
 const SPRING_CONFIG = { damping: 25, stiffness: 200, mass: 0.5 } as const;
@@ -96,7 +109,13 @@ export const Projects = () => {
     <>
       {/* Mobile swiper*/}
       <div className="mt-20 flex cursor-pointer items-center justify-center md:hidden">
-        <ProjectsSwiper projects={data || []} />
+        <Suspense
+          fallback={
+            <div className="h-[250px] w-full animate-pulse rounded bg-white/10" />
+          }
+        >
+          <ProjectsSwiper projects={data || []} />
+        </Suspense>
       </div>
 
       <div className="mt-40 hidden md:flex">
@@ -126,7 +145,7 @@ export const Projects = () => {
           className="mx-auto mt-20 flex max-w-440 p-5"
         >
           <div className="flex w-full flex-col items-center justify-center gap-4">
-            <h1 className="text-xs leading-4 font-semibold tracking-wider text-white/40 uppercase">
+            <h1 className="text-xs leading-4 font-semibold tracking-wider text-white/70 uppercase">
               Featured Projects
             </h1>
 
@@ -173,9 +192,9 @@ export const Projects = () => {
                               src={project.image.url}
                               alt={project.title || ""}
                               priority
-                              className="h-full object-fill"
+                              className="h-full w-full object-cover"
                               height={600}
-                              width={600}
+                              width={1200}
                             />
                           </motion.div>
                         </div>
@@ -184,7 +203,7 @@ export const Projects = () => {
 
                   <Link href={`/projects/${project.slug}`}>
                     <motion.h2
-                      className="mt-2 text-xs leading-4 font-semibold tracking-wider text-white/40 uppercase"
+                      className="mt-2 text-xs leading-4 font-semibold tracking-wider text-white/70 uppercase"
                       animate={{
                         x: activeProject === project.id ? 8 : 0,
                         color:

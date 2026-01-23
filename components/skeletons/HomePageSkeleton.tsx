@@ -18,7 +18,7 @@ export const HomePageSkeleton = () => {
       <div className="hidden md:flex">
         <div className="mx-auto mt-20 flex w-full max-w-440 p-5">
           <div className="flex w-full flex-col items-center justify-center gap-8">
-            <h1 className="text-xs leading-4 font-semibold tracking-wider text-white/40 uppercase">
+            <h1 className="text-xs leading-4 font-semibold tracking-wider text-white/70 uppercase">
               Featured Projects
             </h1>
 

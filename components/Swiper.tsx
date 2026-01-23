@@ -52,7 +52,7 @@ export const ProjectsSwiper = memo(function ProjectsSwiper({
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       className="relative mt-20 flex w-full flex-col items-center gap-2"
     >
-      <h1 className="text-xs leading-4 font-semibold tracking-wider text-white/40 uppercase">
+      <h1 className="text-xs leading-4 font-semibold tracking-wider text-white/70 uppercase">
         Featured Projects
       </h1>
       <Swiper
@@ -92,9 +92,9 @@ export const ProjectsSwiper = memo(function ProjectsSwiper({
       {/* Project Title */}
       <div className="text-center">
         <Link href={`/projects/${projects[activeIndex]?.slug}`}>
-          <h3 className="text-sm font-semibold tracking-wider text-white/40 uppercase">
+          <h2 className="text-sm font-semibold tracking-wider text-white/70 uppercase">
             {projects[activeIndex]?.title}
-          </h3>
+          </h2>
         </Link>
       </div>
 
@@ -104,14 +104,14 @@ export const ProjectsSwiper = memo(function ProjectsSwiper({
           className="swiper-button-prev-custom flex h-12 w-12 cursor-pointer items-center justify-center rounded-md border border-white/20 bg-transparent transition-all hover:bg-white/10"
           aria-label="Previous slide"
         >
-          <ChevronLeft className="h-6 w-6 text-white/40" />
+          <ChevronLeft className="h-6 w-6 text-white/70" />
         </button>
 
         <button
           className="swiper-button-next-custom flex h-12 w-12 cursor-pointer items-center justify-center rounded-md border border-white/20 bg-transparent transition-all hover:bg-white/10"
           aria-label="Next slide"
         >
-          <ChevronRight className="h-6 w-6 text-white/40" />
+          <ChevronRight className="h-6 w-6 text-white/70" />
         </button>
       </div>
     </motion.div>

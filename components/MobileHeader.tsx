@@ -60,7 +60,7 @@ export const MobileHeader = () => {
 
   return (
     <Drawer direction="top" open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger>
+      <DrawerTrigger aria-label="Open navigation menu">
         <CiMenuBurger className="size-6 cursor-pointer text-white" />
       </DrawerTrigger>
       <DrawerContent>

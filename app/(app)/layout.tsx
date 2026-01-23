@@ -45,6 +45,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning rel="preload">
+      <head>
+        {/* Preconnect to external origins for faster resource loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        {/* Preconnect to Vercel Blob storage for images */}
+        <link
+          rel="preconnect"
+          href="https://public.blob.vercel-storage.com"
+          crossOrigin="anonymous"
+        />
+        {/* DNS prefetch as fallback */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link
+          rel="dns-prefetch"
+          href="https://public.blob.vercel-storage.com"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} antialiased`}
         suppressHydrationWarning

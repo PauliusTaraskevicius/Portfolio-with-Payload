@@ -63,7 +63,7 @@ export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
           {data?.title}
         </h1>
         <div className="max-w-140 text-center">
-          <p className="font-bebas text-sm tracking-widest text-white/40">
+          <p className="font-bebas text-sm tracking-widest text-white/70">
             {data?.description}
           </p>
         </div>
@@ -95,7 +95,7 @@ export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
                 height={600}
                 width={600}
               />
-              <span className="font-bebas text-md rounded py-2 text-white/40 lg:text-left">
+              <span className="font-bebas text-md rounded py-2 text-white/70 lg:text-left">
                 /{index + 1}
               </span>
             </div>
