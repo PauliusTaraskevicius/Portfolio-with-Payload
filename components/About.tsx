@@ -1,14 +1,8 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { Bebas_Neue } from "next/font/google";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 export const About = () => {
   const aboutMeRef = useRef<HTMLDivElement>(null);
@@ -35,9 +29,7 @@ export const About = () => {
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       className="mx-auto mt-20 flex max-w-240 flex-col items-center justify-center gap-4 px-4"
     >
-      <motion.span
-        className={`${bebasNeue.className} text-center text-3xl text-white md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl`}
-      >
+      <motion.span className="font-bebas text-center text-3xl text-white md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
         I work with individuals studios and companies to turn their vision into
         powerful websites
       </motion.span>

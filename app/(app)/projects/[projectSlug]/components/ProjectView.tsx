@@ -3,17 +3,10 @@
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
-import { Bebas_Neue } from "next/font/google";
 import { motion } from "framer-motion";
 
 import Image from "next/image";
 import { ProjectsDialog } from "../../components/ProjectsDialog";
-
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
 
 interface ProjectViewViewProps {
   projectSlug: string;
@@ -66,15 +59,11 @@ export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
             </Badge>
           ))}
         </div>
-        <h1
-          className={`${bebasNeue.className} text-center text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl`}
-        >
+        <h1 className="font-bebas text-center text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl">
           {data?.title}
         </h1>
         <div className="max-w-140 text-center">
-          <p
-            className={`${bebasNeue.className} text-sm tracking-widest text-white/40`}
-          >
+          <p className="font-bebas text-sm tracking-widest text-white/40">
             {data?.description}
           </p>
         </div>
@@ -106,9 +95,7 @@ export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
                 height={600}
                 width={600}
               />
-              <span
-                className={`${bebasNeue.className} text-md rounded py-2 text-white/40 lg:text-left`}
-              >
+              <span className="font-bebas text-md rounded py-2 text-white/40 lg:text-left">
                 /{index + 1}
               </span>
             </div>

@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 
 import Image from "next/image";
-import { Bebas_Neue } from "next/font/google";
 import { InfiniteRuningText } from "@/components/InfiniteRuningText";
 import { FaGithub, FaLinkedin, FaFacebook, FaGoogle } from "react-icons/fa";
 
@@ -65,11 +64,6 @@ export const metadata: Metadata = {
   },
 };
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-});
-
 const socialLinks = [
   {
     title: "GitHub",
@@ -108,9 +102,7 @@ const Page = () => {
           />
         </div>
         <div className="w-full">
-          <span
-            className={`${bebasNeue.className} text-[32px] leading-9 tracking-wide text-white/40 transition-colors duration-300 hover:text-white md:text-[40px] md:leading-10`}
-          >
+          <span className="font-bebas text-[32px] leading-9 tracking-wide text-white/40 transition-colors duration-300 hover:text-white md:text-[40px] md:leading-10">
             My first exposure to web development was in 2020. Since then, I've
             built a range of projects and collaborated with talented individuals
             to bring their ideas to life. What I've enjoyed most is the

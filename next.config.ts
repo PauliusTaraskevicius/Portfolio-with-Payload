@@ -1,10 +1,9 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 
 import type { NextConfig } from "next";
-import { hostname } from "os";
 
 const nextConfig: NextConfig = {
-  image: {
+  images: {
     remotePatterns: [
       {
         protocol: "https",
@@ -16,17 +15,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  /* config options here */
-  // experimental: {
-  //   serverComponentsExternalPackages: ["@payloadcms/storage-vercel-blob"],
-  // },
-  // webpack: (config) => {
-  //   config.module.rules.push({
-  //     test: /\.css$/,
-  //     use: ["style-loader", "css-loader"],
-  //   });
-  //   return config;
-  // },
+  // Optimize for modern browsers - reduce bundle size
+  experimental: {
+    optimizePackageImports: [
+      "framer-motion",
+      "lucide-react",
+      "react-icons",
+      "@tanstack/react-query",
+    ],
+  },
+  // Compiler optimizations
+  compiler: {
+    // Remove console logs in production
+    removeConsole: process.env.NODE_ENV === "production",
+  },
 };
 
 export default withPayload(nextConfig);

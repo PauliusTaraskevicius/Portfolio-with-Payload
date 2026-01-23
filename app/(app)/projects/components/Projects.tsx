@@ -3,11 +3,14 @@
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ProjectsSwiper } from "@/components/Swiper";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+// Spring config defined outside to prevent recreation
+const SPRING_CONFIG = { damping: 25, stiffness: 200, mass: 0.5 } as const;
 
 export const Projects = () => {
   const trpc = useTRPC();
@@ -15,30 +18,34 @@ export const Projects = () => {
   const [activeProject, setActiveProject] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Mouse position tracking
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   // Smooth spring animation for cursor follower
-  const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
-  const cursorX = useSpring(mouseX, springConfig);
-  const cursorY = useSpring(mouseY, springConfig);
+  const cursorX = useSpring(mouseX, SPRING_CONFIG);
+  const cursorY = useSpring(mouseY, SPRING_CONFIG);
 
+  // Check if mobile on mount
   useEffect(() => {
     setMounted(true);
+    setIsMobile(window.innerWidth < 768);
   }, []);
 
+  // Optimized mouse move handler - only attach on desktop
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || isMobile) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY, mounted]);
+  }, [mouseX, mouseY, mounted, isMobile]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -49,21 +56,32 @@ export const Projects = () => {
     return () => clearTimeout(timer);
   }, [mounted]);
 
-  const getScale = (projectId: string, index: number, activeIndex: number) => {
-    if (activeProject === null) return 1;
-    if (activeProject === projectId) return 1.08;
-    const distance = Math.abs(index - activeIndex);
-    return Math.max(0.6, 1 - distance * 0.08);
-  };
+  // Memoized scale calculator
+  const getScale = useCallback(
+    (projectId: string, index: number, activeIdx: number) => {
+      if (activeProject === null) return 1;
+      if (activeProject === projectId) return 1.08;
+      const distance = Math.abs(index - activeIdx);
+      return Math.max(0.6, 1 - distance * 0.08);
+    },
+    [activeProject],
+  );
 
-  const getMargin = (projectId: string, index: number, activeIndex: number) => {
-    if (activeProject === null) return 0;
-    if (activeProject === projectId) return 0;
-    const distance = Math.abs(index - activeIndex);
-    return -distance * 10;
-  };
+  // Memoized margin calculator
+  const getMargin = useCallback(
+    (projectId: string, index: number, activeIdx: number) => {
+      if (activeProject === null) return 0;
+      if (activeProject === projectId) return 0;
+      const distance = Math.abs(index - activeIdx);
+      return -distance * 10;
+    },
+    [activeProject],
+  );
 
-  const activeIndex = data?.findIndex((p) => p.id === activeProject) ?? -1;
+  const activeIndex = useMemo(
+    () => data?.findIndex((p) => p.id === activeProject) ?? -1,
+    [data, activeProject],
+  );
 
   // Don't render until mounted to avoid hydration mismatch
   if (!mounted) {
