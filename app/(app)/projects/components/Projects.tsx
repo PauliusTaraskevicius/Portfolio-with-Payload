@@ -14,6 +14,7 @@ import {
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { useImagePreload } from "@/components/ImagePreloadProvider";
 
 // Lazy load Swiper - only needed on mobile
 const ProjectsSwiper = lazy(() =>
@@ -29,9 +30,9 @@ export const Projects = () => {
   const trpc = useTRPC();
   const { data } = useQuery(trpc.projects.getMany.queryOptions());
   const [activeProject, setActiveProject] = useState<string | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { areImagesReady, registerImages } = useImagePreload();
 
   // Mouse position tracking
   const mouseX = useMotionValue(0);
@@ -40,6 +41,21 @@ export const Projects = () => {
   // Smooth spring animation for cursor follower
   const cursorX = useSpring(mouseX, SPRING_CONFIG);
   const cursorY = useSpring(mouseY, SPRING_CONFIG);
+
+  // Register all project images for preloading when data is available
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const imageUrls = data
+        .map((project) =>
+          typeof project.image !== "string" ? project.image?.url : null,
+        )
+        .filter((url): url is string => !!url);
+
+      if (imageUrls.length > 0) {
+        registerImages(imageUrls);
+      }
+    }
+  }, [data, registerImages]);
 
   // Check if mobile on mount
   useEffect(() => {
@@ -59,15 +75,6 @@ export const Projects = () => {
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY, mounted, isMobile]);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1600);
-
-    return () => clearTimeout(timer);
-  }, [mounted]);
 
   // Memoized scale calculator
   const getScale = useCallback(
@@ -140,7 +147,9 @@ export const Projects = () => {
 
         <motion.div
           initial={{ y: 0, opacity: 0 }}
-          animate={isLoaded ? { y: -100, opacity: 1 } : { y: 0, opacity: 0 }}
+          animate={
+            areImagesReady ? { y: -100, opacity: 1 } : { y: 0, opacity: 0 }
+          }
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
           className="mx-auto mt-20 flex max-w-440 p-5"
         >

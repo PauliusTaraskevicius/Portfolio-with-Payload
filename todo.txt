@@ -7,3 +7,5 @@
         type: "image/png",
       },
     ], fieldus metadata
+
+- Initial cold start when hosted images loads very slow (homepage, projects) and different in sizes.Make initial intro loading as long as it takes that when it loads all posts images are loaded.
