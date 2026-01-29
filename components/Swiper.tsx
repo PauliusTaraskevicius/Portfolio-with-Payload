@@ -14,6 +14,7 @@ import { Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useImagePreload } from "./ImagePreloadProvider";
 
 interface ProjectsSwiperProps {
   projects: Project[];
@@ -24,16 +25,11 @@ export const ProjectsSwiper = memo(function ProjectsSwiper({
   projects,
 }: ProjectsSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { areImagesReady } = useImagePreload();
 
   useEffect(() => {
     setMounted(true);
-    // Start loaded timer immediately
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1600);
-    return () => clearTimeout(timer);
   }, []);
 
   const handleSlideChange = (swiper: SwiperType) => {
@@ -48,7 +44,7 @@ export const ProjectsSwiper = memo(function ProjectsSwiper({
   return (
     <motion.div
       initial={{ y: 0, opacity: 0 }}
-      animate={isLoaded ? { y: -100, opacity: 1 } : { y: 0, opacity: 0 }}
+      animate={areImagesReady ? { y: -100, opacity: 1 } : { y: 0, opacity: 0 }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       className="relative mt-20 flex w-full flex-col items-center gap-2"
     >

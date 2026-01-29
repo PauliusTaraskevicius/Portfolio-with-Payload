@@ -9,6 +9,7 @@ import { HomePageSkeleton } from "@/components/skeletons/HomePageSkeleton";
 import { ListProjectViewSkeleton } from "@/components/skeletons/ListProjectViewSkeleton";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { ImagePreloadProvider } from "@/components/ImagePreloadProvider";
 
 // Dynamic imports for non-critical components (reduces initial JS bundle)
 const Homepage = dynamic(() =>
@@ -118,21 +119,23 @@ export default async function Home() {
           fetchPriority="high"
         />
       )}
-      <Homepage />
-      <QueryHydrationWrapper state={dehydrate(queryClient)}>
-        <Suspense fallback={<HomePageSkeleton />}>
-          <ErrorBoundary fallback={<p>Error loading projects.</p>}>
-            <Projects />
-          </ErrorBoundary>
-        </Suspense>
-        <Introduction />
-        <About />
-        <Suspense fallback={<ListProjectViewSkeleton />}>
-          <ErrorBoundary fallback={<p>Error loading projects.</p>}>
-            <ListProjectsViewWrapper />
-          </ErrorBoundary>
-        </Suspense>
-      </QueryHydrationWrapper>
+      <ImagePreloadProvider minLoadTime={1600} maxWaitTime={8000}>
+        <Homepage />
+        <QueryHydrationWrapper state={dehydrate(queryClient)}>
+          <Suspense fallback={<HomePageSkeleton />}>
+            <ErrorBoundary fallback={<p>Error loading projects.</p>}>
+              <Projects />
+            </ErrorBoundary>
+          </Suspense>
+          <Introduction />
+          <About />
+          <Suspense fallback={<ListProjectViewSkeleton />}>
+            <ErrorBoundary fallback={<p>Error loading projects.</p>}>
+              <ListProjectsViewWrapper />
+            </ErrorBoundary>
+          </Suspense>
+        </QueryHydrationWrapper>
+      </ImagePreloadProvider>
     </>
   );
 }

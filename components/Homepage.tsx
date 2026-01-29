@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, useAnimation, Variants } from "framer-motion";
-import { useEffect, useState, useLayoutEffect, useMemo } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
+import { useImagePreload } from "./ImagePreloadProvider";
 
 // Static animation variants - defined outside component to avoid recreation
 const containerVariants: Variants = {
@@ -33,7 +34,9 @@ export const Homepage = () => {
   const [shrink, setShrink] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [textAnimationComplete, setTextAnimationComplete] = useState(false);
   const controls = useAnimation();
+  const { areImagesReady } = useImagePreload();
 
   // Scroll to top and prevent scrolling on mount (before paint)
   useLayoutEffect(() => {
@@ -52,19 +55,31 @@ export const Homepage = () => {
   useEffect(() => {
     setIsMounted(true);
 
-    let timeoutIds: NodeJS.Timeout[] = [];
-
-    const sequence = async () => {
+    const runTextAnimation = async () => {
       await new Promise<void>((resolve) => {
-        const id = setTimeout(resolve, 100);
-        timeoutIds.push(id);
+        setTimeout(resolve, 100);
       });
       await controls.start("visible");
+      setTextAnimationComplete(true);
+    };
+
+    runTextAnimation();
+  }, [controls]);
+
+  // Handle shrink and hide loader when images are ready
+  useEffect(() => {
+    if (!textAnimationComplete || !areImagesReady) return;
+
+    let timeoutIds: NodeJS.Timeout[] = [];
+
+    const completeSequence = async () => {
+      // Small delay after images ready
       await new Promise<void>((resolve) => {
         const id = setTimeout(resolve, 100);
         timeoutIds.push(id);
       });
       setShrink(true);
+      // Wait for shrink animation
       await new Promise<void>((resolve) => {
         const id = setTimeout(resolve, 1600);
         timeoutIds.push(id);
@@ -73,12 +88,12 @@ export const Homepage = () => {
       document.body.style.overflow = "";
     };
 
-    sequence();
+    completeSequence();
 
     return () => {
       timeoutIds.forEach(clearTimeout);
     };
-  }, [controls]);
+  }, [textAnimationComplete, areImagesReady]);
 
   return (
     <>

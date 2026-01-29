@@ -72,7 +72,8 @@ export const ProjectsHoverList = () => {
                         src={leftImages[0] as string}
                         alt={`${project.title} image 1`}
                         fill
-                        sizes="(max-width: 1024px) 160px, (max-width: 1280px) 200px, 240px"
+                        quality={90}
+                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
                         className="object-cover"
                       />
                     </div>
@@ -83,6 +84,8 @@ export const ProjectsHoverList = () => {
                         src={leftImages[1] as string}
                         alt={`${project.title} image 2`}
                         fill
+                        quality={90}
+                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
                         className="object-cover"
                       />
                     </div>
@@ -122,6 +125,8 @@ export const ProjectsHoverList = () => {
                         src={rightImages[0] as string}
                         alt={`${project.title} image 3`}
                         fill
+                        quality={90}
+                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
                         className="object-cover"
                       />
                     </div>
@@ -132,6 +137,7 @@ export const ProjectsHoverList = () => {
                         src={rightImages[1] as string}
                         alt={`${project.title} image 4`}
                         fill
+                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
                         className="object-cover"
                       />
                     </div>
