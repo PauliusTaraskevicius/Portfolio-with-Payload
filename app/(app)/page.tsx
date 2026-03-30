@@ -34,6 +34,8 @@ const ListProjectsViewWrapper = dynamic(() =>
   })),
 );
 
+export const revalidate = 60; // Revalidate every 60 seconds for ISR
+
 export const metadata: Metadata = {
   title:
     "PaulyDev – Full-Stack Web Developer | Next.js, React, Web Applications",
@@ -94,19 +96,16 @@ export const metadata: Metadata = {
 export default async function Home() {
   const queryClient = getQueryClient();
 
-  void queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
+  // void queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
+
+  await queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
 
   // Fetch first project image for LCP preload
-  const payload = await getPayload({ config });
-  const projects = await payload.find({
-    collection: "projects",
-    limit: 1,
-    sort: "-createdAt",
-  });
-
-  const firstProjectImage = projects.docs[0]?.image;
-  const lcpImageUrl =
-    typeof firstProjectImage !== "string" ? firstProjectImage?.url : null;
+  // const payload = await getPayload({ config });
+// Get the data from the cache
+  const projects = queryClient.getQueryData(trpc.projects.getMany.queryOptions().queryKey);
+  const firstProject = projects?.[0];
+  const lcpImageUrl = typeof firstProject?.image !== 'string' ? firstProject?.image?.url : null;
 
   return (
     <>
@@ -119,7 +118,7 @@ export default async function Home() {
           fetchPriority="high"
         />
       )}
-      <ImagePreloadProvider minLoadTime={1600} maxWaitTime={8000}>
+      <ImagePreloadProvider minLoadTime={0} maxWaitTime={3000}>
         <Homepage />
         <QueryHydrationWrapper state={dehydrate(queryClient)}>
           <Suspense fallback={<HomePageSkeleton />}>

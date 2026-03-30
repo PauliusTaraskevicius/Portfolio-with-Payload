@@ -4,6 +4,8 @@ import Image from "next/image";
 import { InfiniteRuningText } from "@/components/InfiniteRuningText";
 import { FaGithub, FaLinkedin, FaFacebook, FaGoogle } from "react-icons/fa";
 
+export const revalidate = 60; // Revalidate every 60 seconds for ISR
+
 export const metadata: Metadata = {
   title:
     "PaulyDev – Full-Stack Web Developer | Next.js, React, Web Applications",

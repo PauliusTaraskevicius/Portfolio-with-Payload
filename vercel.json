@@ -1,10 +1,7 @@
 {
   "functions": {
-    "app/(payload)/**/*": {
-      "maxDuration": 60
-    },
-    "app/(payload)/admin/**/*": {
-      "maxDuration": 60
-    }
+    "app/(app)/page.tsx": { "maxDuration": 30 },
+    "app/(payload)/**/*": { "maxDuration": 60 },
+    "app/(payload)/admin/**/*": { "maxDuration": 60 }
   }
 }

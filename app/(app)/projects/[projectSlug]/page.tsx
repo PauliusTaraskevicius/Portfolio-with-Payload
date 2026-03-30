@@ -38,6 +38,8 @@ function getOgImage(image: (string | null) | Media | undefined) {
   return undefined;
 }
 
+export const revalidate = 60; // Revalidate every 60 seconds for ISR
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {

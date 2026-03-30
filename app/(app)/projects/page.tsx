@@ -7,6 +7,8 @@ import { ProjectsHoverList } from "./components/ProjectsHoverList";
 import { ProjectsHoverListSkeleton } from "@/components/skeletons/ProjectsHoverListSkeleton";
 import { QueryHydrationWrapper } from "@/components/QueryHydrationWrapper";
 
+export const revalidate = 60; // Revalidate every 60 seconds for ISR
+
 export const metadata: Metadata = {
   title: "Projects | PaulyDev – Web Development Portfolio & Case Studies",
   description:
