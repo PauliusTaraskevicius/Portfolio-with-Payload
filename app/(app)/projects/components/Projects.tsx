@@ -15,6 +15,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useImagePreload } from "@/components/ImagePreloadProvider";
+import { shimmer } from "@/lib/utils";
 
 // Lazy load Swiper - only needed on mobile
 const ProjectsSwiper = lazy(() =>
@@ -204,6 +205,7 @@ export const Projects = () => {
                               className="h-full w-full object-cover"
                               height={600}
                               width={1200}
+                              blurDataURL={shimmer(240, 260)}
                             />
                           </motion.div>
                         </div>

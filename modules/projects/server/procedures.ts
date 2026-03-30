@@ -14,6 +14,7 @@ export const projectsRouter = createTRPCRouter({
     const formattedData = data.docs.map((doc) => ({
       ...doc,
     }));
+
     return formattedData as Project[];
   }),
   getOne: baseProcedure

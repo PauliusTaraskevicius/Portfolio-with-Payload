@@ -6,6 +6,7 @@ import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { shimmer } from "@/lib/utils";
 
 const getImageUrl = (
   image: string | Media | null | undefined,
@@ -46,7 +47,7 @@ export const ProjectsHoverList = () => {
 
       {/* Desktop View - snap scrolling with images side by side */}
       <div className="mx-auto hidden h-screen max-w-440 snap-y snap-mandatory overflow-y-scroll [scrollbar-width:none] md:block [&::-webkit-scrollbar]:hidden">
-        {data?.map((project) => {
+        {data?.map((project, projectIndex) => {
           const galleryImages =
             project.gallery
               ?.map((item) => getImageUrl(item.image))
@@ -73,8 +74,10 @@ export const ProjectsHoverList = () => {
                         alt={`${project.title} image 1`}
                         fill
                         quality={90}
-                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
+                        loading={projectIndex === 0 ? "eager" : "lazy"}
+                        sizes="(max-width: 1024px) 160px, (max-width: 1280px) 200px, 240px"
                         className="object-cover"
+                        blurDataURL={shimmer(240, 260)}
                       />
                     </div>
                   )}
@@ -85,8 +88,10 @@ export const ProjectsHoverList = () => {
                         alt={`${project.title} image 2`}
                         fill
                         quality={90}
-                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
+                        loading={projectIndex === 0 ? "eager" : "lazy"}
+                        sizes="(max-width: 1024px) 160px, (max-width: 1280px) 200px, 240px"
                         className="object-cover"
+                        blurDataURL={shimmer(240, 260)}
                       />
                     </div>
                   )}
@@ -106,7 +111,7 @@ export const ProjectsHoverList = () => {
                     ))}
                   </div>
                   <Link href={`/projects/${project.slug}`}>
-                    <span className="font-bebas text-center text-[60px] leading-[0.9] font-semibold text-white uppercase transition hover:text-white/70 lg:text-[90px] xl:text-[120px]">
+                    <span className="font-bebas text-center text-[60px] leading-[0.9] font-semibold text-white uppercase transition hover:text-white/70 lg:text-[80px] xl:text-[120px]">
                       {project.title}
                     </span>
                   </Link>
@@ -126,8 +131,10 @@ export const ProjectsHoverList = () => {
                         alt={`${project.title} image 3`}
                         fill
                         quality={90}
-                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
+                        loading={projectIndex === 0 ? "eager" : "lazy"}
+                        sizes="(max-width: 1024px) 160px, (max-width: 1280px) 200px, 240px"
                         className="object-cover"
+                        blurDataURL={shimmer(240, 260)}
                       />
                     </div>
                   )}
@@ -137,8 +144,11 @@ export const ProjectsHoverList = () => {
                         src={rightImages[1] as string}
                         alt={`${project.title} image 4`}
                         fill
-                        sizes="(max-width: 1024px) 320px, (max-width: 1280px) 400px, 480px"
+                        quality={90}
+                        loading={projectIndex === 0 ? "eager" : "lazy"}
+                        sizes="(max-width: 1024px) 160px, (max-width: 1280px) 200px, 240px"
                         className="object-cover"
+                        blurDataURL={shimmer(240, 260)}
                       />
                     </div>
                   )}

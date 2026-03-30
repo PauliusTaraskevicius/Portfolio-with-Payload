@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 
 import Image from "next/image";
 import { ProjectsDialog } from "../../components/ProjectsDialog";
+import { shimmer } from "@/lib/utils";
 
 interface ProjectViewViewProps {
   projectSlug: string;
@@ -94,6 +95,7 @@ export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
                 className="h-full rounded object-fill"
                 height={600}
                 width={600}
+                blurDataURL={shimmer(240, 260)}
               />
               <span className="font-bebas text-md rounded py-2 text-white/70 lg:text-left">
                 /{index + 1}
