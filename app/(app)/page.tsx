@@ -7,9 +7,8 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { HomePageSkeleton } from "@/components/skeletons/HomePageSkeleton";
 import { ListProjectViewSkeleton } from "@/components/skeletons/ListProjectViewSkeleton";
-import { getPayload } from "payload";
-import config from "@payload-config";
 import { ImagePreloadProvider } from "@/components/ImagePreloadProvider";
+import { getFirstProjectForLcpCached } from "@/modules/projects/server/queries";
 
 // Dynamic imports for non-critical components (reduces initial JS bundle)
 const Homepage = dynamic(() =>
@@ -34,7 +33,7 @@ const ListProjectsViewWrapper = dynamic(() =>
   })),
 );
 
-export const revalidate = 60; // Revalidate every 60 seconds for ISR
+export const revalidate = 86400; // Revalidate every 24 hours for ISR
 
 export const metadata: Metadata = {
   title:
@@ -96,16 +95,15 @@ export const metadata: Metadata = {
 export default async function Home() {
   const queryClient = getQueryClient();
 
-  // void queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
+  // Lightweight blocking fetch for LCP image URL only
+  const firstProject = await getFirstProjectForLcpCached();
+  const lcpImageUrl =
+    firstProject && typeof firstProject.image !== "string"
+      ? firstProject.image?.url
+      : null;
 
-  await queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
-
-  // Fetch first project image for LCP preload
-  // const payload = await getPayload({ config });
-// Get the data from the cache
-  const projects = queryClient.getQueryData(trpc.projects.getMany.queryOptions().queryKey);
-  const firstProject = projects?.[0];
-  const lcpImageUrl = typeof firstProject?.image !== 'string' ? firstProject?.image?.url : null;
+  // Non-blocking prefetch for full project list
+  void queryClient.prefetchQuery(trpc.projects.getMany.queryOptions());
 
   return (
     <>
