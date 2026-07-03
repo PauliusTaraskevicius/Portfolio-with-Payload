@@ -1,15 +1,17 @@
 import { getQueryClient, trpc } from "@/trpc/server";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { dehydrate } from "@tanstack/react-query";
 import { ProjectView } from "./components/ProjectView";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ProjectViewSkeleton } from "@/components/skeletons/ProjectViewSkeleton";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { createTRPCContext } from "@/trpc/init";
-import { appRouter } from "@/trpc/routers/_app";
 import { Media } from "@/payload-types";
 import { QueryHydrationWrapper } from "@/components/QueryHydrationWrapper";
+import {
+  getProjectBySlugCached,
+  getProjectSlugsCached,
+} from "@/modules/projects/server/queries";
 
 interface PageProps {
   params: Promise<{ projectSlug: string }>;
@@ -38,18 +40,24 @@ function getOgImage(image: (string | null) | Media | undefined) {
   return undefined;
 }
 
-export const revalidate = 60; // Revalidate every 60 seconds for ISR
+export const revalidate = 86400; // Revalidate every 24 hours since edits are rare
+
+export async function generateStaticParams() {
+  const data = await getProjectSlugsCached();
+  return data.docs.map((project) => ({
+    projectSlug: String(project.slug),
+  }));
+}
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { projectSlug } = await params;
 
-  const ctx = await createTRPCContext();
-  const caller = appRouter.createCaller(ctx);
-
   try {
-    const project = await caller.projects.getOne({ slug: projectSlug });
+    const data = await getProjectBySlugCached(projectSlug);
+    const project = data.docs[0];
+    if (!project) throw new Error("Not found");
 
     const title = project.title ?? "Project";
 
