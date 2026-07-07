@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import {
   useEffect,
@@ -13,7 +13,6 @@ import {
 } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { useImagePreload } from "@/components/ImagePreloadProvider";
 import { shimmer } from "@/lib/utils";
 
@@ -29,11 +28,10 @@ const SPRING_CONFIG = { damping: 25, stiffness: 200, mass: 0.5 } as const;
 
 export const Projects = () => {
   const trpc = useTRPC();
-  const { data } = useQuery(trpc.projects.getMany.queryOptions());
+  const { data } = useSuspenseQuery(trpc.projects.getMany.queryOptions());
   const [activeProject, setActiveProject] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const { areImagesReady, registerImages } = useImagePreload();
+  const { registerImages } = useImagePreload();
 
   // Mouse position tracking
   const mouseX = useMotionValue(0);
@@ -58,15 +56,13 @@ export const Projects = () => {
     }
   }, [data, registerImages]);
 
-  // Check if mobile on mount
   useEffect(() => {
     setMounted(true);
-    setIsMobile(window.innerWidth < 768);
   }, []);
 
-  // Optimized mouse move handler - only attach on desktop
+  // Optimized mouse move handler - only attach on desktop after mount
   useEffect(() => {
-    if (!mounted || isMobile) return;
+    if (!mounted) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
@@ -75,7 +71,7 @@ export const Projects = () => {
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY, mounted, isMobile]);
+  }, [mouseX, mouseY, mounted]);
 
   // Memoized scale calculator
   const getScale = useCallback(
@@ -104,15 +100,6 @@ export const Projects = () => {
     [data, activeProject],
   );
 
-  // Don't render until mounted to avoid hydration mismatch
-  if (!mounted) {
-    return null;
-  }
-
-  if (!data) {
-    return notFound();
-  }
-
   return (
     <>
       {/* Mobile swiper*/}
@@ -122,35 +109,35 @@ export const Projects = () => {
             <div className="h-[250px] w-full animate-pulse rounded bg-white/10" />
           }
         >
-          <ProjectsSwiper projects={data || []} />
+          <ProjectsSwiper projects={data} />
         </Suspense>
       </div>
 
       <div className="mt-40 hidden md:flex">
         {/* Cursor follower */}
-        <motion.div
-          style={{
-            left: cursorX,
-            top: cursorY,
-          }}
-          className="pointer-events-none fixed z-50 translate-x-2 translate-y-2"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{
-            opacity: activeProject !== null ? 1 : 0,
-            scale: activeProject !== null ? 1 : 0.8,
-          }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span className="text-muted-foreground text-xs leading-4 font-semibold tracking-wider uppercase">
-            Open Project
-          </span>
-        </motion.div>
+        {mounted && (
+          <motion.div
+            style={{
+              left: cursorX,
+              top: cursorY,
+            }}
+            className="pointer-events-none fixed z-50 translate-x-2 translate-y-2"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{
+              opacity: activeProject !== null ? 1 : 0,
+              scale: activeProject !== null ? 1 : 0.8,
+            }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="text-muted-foreground text-xs leading-4 font-semibold tracking-wider uppercase">
+              Open Project
+            </span>
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ y: 0, opacity: 0 }}
-          animate={
-            areImagesReady ? { y: -100, opacity: 1 } : { y: 0, opacity: 0 }
-          }
+          animate={{ y: -100, opacity: 1 }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
           className="mx-auto mt-20 flex max-w-440 p-5"
         >
@@ -160,7 +147,7 @@ export const Projects = () => {
             </h1>
 
             <div className="flex w-full gap-4 text-white">
-              {data?.map((project, index) => (
+              {data.map((project, index) => (
                 <motion.div
                   key={project.id}
                   onMouseEnter={() => setActiveProject(project.id)}
@@ -202,9 +189,11 @@ export const Projects = () => {
                               src={project.image.url}
                               alt={project.title || ""}
                               priority
+                              sizes="(max-width: 768px) 100vw, 50vw"
                               className="h-full w-full object-cover"
                               height={600}
                               width={1200}
+                              placeholder="blur"
                               blurDataURL={shimmer(240, 260)}
                             />
                           </motion.div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 
@@ -16,7 +16,7 @@ interface ProjectViewViewProps {
 export const ProjectView = ({ projectSlug }: ProjectViewViewProps) => {
   const trpc = useTRPC();
 
-  const { data } = useSuspenseQuery(
+  const { data } = useQuery(
     trpc.projects.getOne.queryOptions({ slug: projectSlug }),
   );
 
