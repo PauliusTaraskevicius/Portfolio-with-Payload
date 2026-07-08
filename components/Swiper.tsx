@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
@@ -15,7 +15,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useImagePreload } from "./ImagePreloadProvider";
-import { shimmer } from "@/lib/utils";
 
 interface ProjectsSwiperProps {
   projects: Project[];
@@ -26,11 +25,21 @@ export const ProjectsSwiper = memo(function ProjectsSwiper({
   projects,
 }: ProjectsSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const { areImagesReady } = useImagePreload();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex);
   };
+
+  // Don't render Swiper until client-side hydration is complete
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -65,10 +74,8 @@ export const ProjectsSwiper = memo(function ProjectsSwiper({
                       alt={project.title || ""}
                       priority
                       sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
+                      className="h-full w-full object-cover"
                       fill
-                      placeholder="blur"
-                      blurDataURL={shimmer(240, 260)}
                     />
                   </div>
                 </div>
