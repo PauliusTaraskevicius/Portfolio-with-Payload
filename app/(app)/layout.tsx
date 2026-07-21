@@ -4,6 +4,8 @@ import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -77,6 +79,8 @@ export default function RootLayout({
             <Toaster />
           </main>
         </TRPCReactProvider>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
