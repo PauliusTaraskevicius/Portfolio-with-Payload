@@ -3,14 +3,18 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { cache } from "react";
 
-let payloadInstance: Awaited<ReturnType<typeof getPayload>> | null = null;
+type PayloadInstance = Awaited<ReturnType<typeof getPayload>>;
 
-export const getPayloadInstance = cache(async () => {
-  if (!payloadInstance) {
-    payloadInstance = await getPayload({ config });
+// Use globalThis so the Payload instance (and its DB connection) is reused
+// across requests, hot reloads, and warm serverless invocations.
+const globalForPayload = globalThis as unknown as { payload?: PayloadInstance };
+
+export const getPayloadInstance = async (): Promise<PayloadInstance> => {
+  if (!globalForPayload.payload) {
+    globalForPayload.payload = await getPayload({ config });
   }
-  return payloadInstance;
-});
+  return globalForPayload.payload;
+};
 
 export const createTRPCContext = cache(async () => {
   /**
