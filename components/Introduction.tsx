@@ -82,7 +82,7 @@ const IntroductionDesktop = () => {
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
           <h2 className="font-bebas text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl">
-            I build websites
+            I build software
           </h2>
           <br />
           <p className="font-bebas text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl">
