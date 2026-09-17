@@ -163,8 +163,8 @@ export const Homepage = () => {
       <div className="mt-20 flex items-center justify-center px-8">
         <div className="flex max-w-4xl flex-col items-center justify-center text-center">
           <h1 className="font-bebas text-6xl leading-12 font-bold tracking-tighter text-white uppercase md:text-7xl md:leading-14 lg:text-8xl lg:leading-20">
-            Crafting Bold &<br />
-            Memorable Websites
+            Turning Ideas Into<br />
+            Production-Ready Software
           </h1>
 
           <motion.p
@@ -173,7 +173,7 @@ export const Homepage = () => {
             animate={hideLoader ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            I'm Paulius, Freelance Fullstack Developer since 2022.
+            I'm Paulius, a Full-Stack Developer focused on building modern, production-ready web applications.
             <br />
             Based in Kaunas, Lithuania
           </motion.p>
