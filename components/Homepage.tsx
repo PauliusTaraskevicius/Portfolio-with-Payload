@@ -27,8 +27,8 @@ const childVariants: Variants = {
   },
 };
 
-const LINE1 = ["Crafting", "Bold", "&"] as const;
-const LINE2 = ["Memorable", "Websites"] as const;
+const LINE1 = ["Turning", "Ideas", "Into"] as const;
+const LINE2 = ["Production-Ready", "Software"] as const;
 
 export const Homepage = () => {
   const [shrink, setShrink] = useState(false);
