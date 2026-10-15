@@ -1,7 +1,9 @@
 "use client";
 
 import { motion, useAnimation, Variants } from "framer-motion";
+
 import { useEffect, useState, useLayoutEffect } from "react";
+
 import { useImagePreload } from "./ImagePreloadProvider";
 
 // Static animation variants - defined outside component to avoid recreation
@@ -30,11 +32,14 @@ const childVariants: Variants = {
 const LINE1 = ["Turning", "Ideas", "Into"] as const;
 const LINE2 = ["Production-Ready", "Software"] as const;
 
+const HEADING_SIZE = "text-[9.5vw] md:text-7xl lg:text-8xl";
+
 export const Homepage = () => {
   const [shrink, setShrink] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [textAnimationComplete, setTextAnimationComplete] = useState(false);
+
   const controls = useAnimation();
   const { areImagesReady } = useImagePreload();
 
@@ -51,7 +56,7 @@ export const Homepage = () => {
     };
   }, []);
 
-  // Combined mount and animation effect
+
   useEffect(() => {
     setIsMounted(true);
 
@@ -59,6 +64,7 @@ export const Homepage = () => {
       await new Promise<void>((resolve) => {
         setTimeout(resolve, 100);
       });
+
       await controls.start("visible");
       setTextAnimationComplete(true);
     };
@@ -66,7 +72,7 @@ export const Homepage = () => {
     runTextAnimation();
   }, [controls]);
 
-  // Handle shrink and hide loader when images are ready
+
   useEffect(() => {
     if (!textAnimationComplete || !areImagesReady) return;
 
@@ -78,12 +84,15 @@ export const Homepage = () => {
         const id = setTimeout(resolve, 100);
         timeoutIds.push(id);
       });
+
       setShrink(true);
+
       // Wait for shrink animation
       await new Promise<void>((resolve) => {
         const id = setTimeout(resolve, 1600);
         timeoutIds.push(id);
       });
+
       setHideLoader(true);
       document.body.style.overflow = "";
     };
@@ -100,17 +109,18 @@ export const Homepage = () => {
       {/* Loading background */}
       {!hideLoader && (
         <motion.div
-          className="pointer-events-none fixed inset-0 z-60 bg-[#0d0d0d]"
+          className="pointer-events-none fixed inset-0 z-[60] bg-[#0d0d0d]"
           initial={{ opacity: 1 }}
           animate={shrink ? { opacity: 0 } : { opacity: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
         />
       )}
 
-      {/* Animated large text during loading */}
+      {/* Animated large text during loading (decorative: the real h1 is below) */}
       {!hideLoader && (
         <motion.div
-          className="pointer-events-none fixed inset-0 z-61 mt-44 flex items-start justify-center"
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-[61] mt-44 flex items-start justify-center"
           initial={{ opacity: 1 }}
           animate={shrink ? { opacity: 0 } : { opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
@@ -129,29 +139,28 @@ export const Homepage = () => {
                 ease: [0.76, 0, 0.24, 1],
                 delay: 0.2,
               }}
-              className="flex flex-col items-center gap-0 -space-y-3 lg:-space-y-4"
+              className={`font-bebas flex flex-col items-center gap-0 leading-[0.95] tracking-tight text-white uppercase ${HEADING_SIZE}`}
             >
-              <div className="flex items-center justify-center gap-1">
+              {/* Line 1 */}
+              <div className="flex items-center justify-center gap-[0.25em] whitespace-nowrap">
                 {LINE1.map((word, index) => (
-                  <motion.div key={index} className="overflow-hidden">
-                    <motion.h1
-                      variants={childVariants}
-                      className="font-bebas overflow-hidden text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl"
-                    >
-                      {word}
-                    </motion.h1>
+                  <motion.div
+                    key={index}
+                    className="shrink-0 overflow-hidden"
+                  >
+                    <motion.div variants={childVariants}>{word}</motion.div>
                   </motion.div>
                 ))}
               </div>
-              <div className="flex items-center justify-center gap-1">
+
+              {/* Line 2 */}
+              <div className="flex items-center justify-center gap-[0.25em] whitespace-nowrap">
                 {LINE2.map((word, index) => (
-                  <motion.div key={index} className="overflow-hidden">
-                    <motion.h1
-                      variants={childVariants}
-                      className="font-bebas text-6xl font-bold tracking-tighter text-white uppercase md:text-7xl lg:text-8xl"
-                    >
-                      {word}
-                    </motion.h1>
+                  <motion.div
+                    key={index}
+                    className="shrink-0 overflow-hidden"
+                  >
+                    <motion.div variants={childVariants}>{word}</motion.div>
                   </motion.div>
                 ))}
               </div>
@@ -160,20 +169,25 @@ export const Homepage = () => {
         </motion.div>
       )}
 
-      <div className="mt-20 flex items-center justify-center px-8">
+      <div className="mt-20 flex items-center justify-center px-4 md:px-8">
         <div className="flex max-w-4xl flex-col items-center justify-center text-center">
-          <h1 className="font-bebas text-6xl leading-12 font-bold tracking-tighter text-white uppercase md:text-7xl md:leading-14 lg:text-8xl lg:leading-20">
-            Turning Ideas Into<br />
-            Production-Ready Software
+          <h1
+            className={`font-bebas leading-[1.05] tracking-tight text-white uppercase ${HEADING_SIZE}`}
+          >
+            <span className="block whitespace-nowrap">Turning Ideas Into</span>
+            <span className="block whitespace-nowrap">
+              Production-Ready Software
+            </span>
           </h1>
 
           <motion.p
-            className="font-bebas text-sm leading-4 tracking-widest text-white/70 uppercase"
+            className="font-bebas mt-2 text-sm leading-4 tracking-widest text-white/70 uppercase"
             initial={{ opacity: 0 }}
             animate={hideLoader ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            I'm Paulius, a Full-Stack Developer focused on building modern, production-ready web applications.
+            I&apos;m Paulius, a Full-Stack Developer focused on building modern,
+            production-ready web applications.
             <br />
             Based in Kaunas, Lithuania
           </motion.p>
